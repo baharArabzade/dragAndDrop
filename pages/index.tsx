@@ -1,20 +1,13 @@
 import React, {useEffect, useState} from 'react';
 import uuid from 'uuid/v4';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
-//style
-import styles from "styles/index.module.scss"
 import SampleQuestionsColumn, {sampleQuestions} from "components/mainRightColumn/SampleQuestionsColumn"
 import QuestionRow from "components/mainLeftColumn/QuestionRow";
+//style
+import styles from "styles/index.module.scss"
+//types
+import {droppableItemInfoType, listOfItemsType} from "types/componentType";
 
-type listOfItems = Array<{
-    id: string, content: string, type: string
-}>
-
-type droppableItemInfo={
-    index: number,
-    droppableId: string
-
-}
 const BuildPage = (): JSX.Element => {
 
     const [data, setData] = useState<object>({'welcome': [], 'exam': [], 'appreciation': []})
