@@ -1,8 +1,8 @@
-import styles from "../../styles/components/sampleQuestionsColumn.module.scss";
+import React, {useState} from "react";
 import {Draggable, Droppable} from "react-beautiful-dnd";
-import React from "react";
 import uuid from "uuid/v4";
-
+//style
+import styles from "styles/components/sampleQuestionsColumn.module.scss";
 
 export const sampleQuestions = [
     {

@@ -1,9 +1,10 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import uuid from 'uuid/v4';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
-import styles from "../styles/index.module.scss"
-import SampleQuestionsColumn, {sampleQuestions} from "../components/mainRightColumn/SampleQuestionsColumn"
-import QuestionRow from "../components/mainLeftColumn/QuestionRow";
+//style
+import styles from "styles/index.module.scss"
+import SampleQuestionsColumn, {sampleQuestions} from "components/mainRightColumn/SampleQuestionsColumn"
+import QuestionRow from "components/mainLeftColumn/QuestionRow";
 
 type listOfItems = Array<{
     id: string, content: string, type: string

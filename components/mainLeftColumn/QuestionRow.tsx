@@ -1,6 +1,7 @@
 import React from 'react';
-import styles from "../../styles/components/questionRow.module.scss";
 import {Draggable} from "react-beautiful-dnd";
+//style
+import styles from "styles/components/questionRow.module.scss";
 
 type QuestionRowProps={
     item:{
