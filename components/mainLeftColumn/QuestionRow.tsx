@@ -2,15 +2,10 @@ import React from 'react';
 import {Draggable} from "react-beautiful-dnd";
 //style
 import styles from "styles/components/questionRow.module.scss";
+// types
+import {QuestionRowProps} from "types/componentType";
 
-type QuestionRowProps={
-    item:{
-        id:string;
-        content:string;
-    };
-    index:number;
-    isDragDisabled:boolean;
-}
+
 const QuestionRow = ({item, index,isDragDisabled}:QuestionRowProps):JSX.Element => {
     return (
         <Draggable
