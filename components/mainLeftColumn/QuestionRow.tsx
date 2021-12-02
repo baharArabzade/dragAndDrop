@@ -1,12 +1,12 @@
 import React from 'react';
 import {Draggable} from "react-beautiful-dnd";
 //style
-import styles from "styles/components/questionRow.module.scss";
+import classes from "styles/components/questionRow.module.scss";
 // types
-import {QuestionRowProps} from "types/componentType";
+import {QuestionRowPropsTypes} from "types/componentType";
 
 
-const QuestionRow = ({item, index,isDragDisabled}:QuestionRowProps):JSX.Element => {
+const QuestionRow = ({item, index,isDragDisabled}:QuestionRowPropsTypes):JSX.Element => {
     return (
         <Draggable
             isDragDisabled={isDragDisabled}
@@ -18,7 +18,7 @@ const QuestionRow = ({item, index,isDragDisabled}:QuestionRowProps):JSX.Element 
                 snapshot
             ) => (
                 <div
-                    className={`${styles.question_row} ${snapshot.isDragging&&styles.dragging_question}`}
+                    className={`${classes.question_row} ${snapshot.isDragging&&classes.dragging_question}`}
 
                     ref={
                         provided.innerRef
