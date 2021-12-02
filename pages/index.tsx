@@ -15,14 +15,14 @@ const BuildPage = (): JSX.Element => {
     const [hasAppreciation, setHasAppreciation] = useState<boolean>(false)
     const [hasWelcome, setHasWelcome] = useState<boolean>(false)
 
-    const reorder = (list:listOfItems, startIndex: number, endIndex: number): listOfItems=> {
+    const reorder = (list:listOfItemsType, startIndex: number, endIndex: number): listOfItemsType=> {
         const result = list;
         const [removed] = result.splice(startIndex, 1);
         result.splice(endIndex, 0, removed);
         return result;
     };
 
-    const copy = (source:listOfItems, destination: listOfItems, droppableSource:droppableItemInfo, droppableDestination: droppableItemInfo): listOfItems => {
+    const copy = (source:listOfItemsType, destination: listOfItemsType, droppableSource:droppableItemInfoType, droppableDestination: droppableItemInfoType): listOfItemsType => {
         const destClone = Array.from(destination);
         const item = source[droppableSource.index];
         destClone.splice(droppableDestination.index, 0, {...item, id: uuid()});
@@ -39,7 +39,7 @@ const BuildPage = (): JSX.Element => {
 
     };
 
-    const move = (source:listOfItems, destination: listOfItems, droppableSource: droppableItemInfo, droppableDestination: droppableItemInfo) => {
+    const move = (source:listOfItemsType, destination: listOfItemsType, droppableSource: droppableItemInfoType, droppableDestination: droppableItemInfoType) => {
         const sourceClone = Array.from(source);
         const destClone = Array.from(destination);
         const [removed] = sourceClone.splice(droppableSource.index, 1);
