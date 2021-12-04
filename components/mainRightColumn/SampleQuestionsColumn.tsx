@@ -50,7 +50,7 @@ const SampleQuestionsColumn = ({isWelcomeDragDisable,isAppreciationDragDisable}:
                 <div className={classes.questionsBox}
                      ref={provided.innerRef}
                 >
-                    {sampleQuestions.map((item, index) => (
+                    {questions.map((item, index) => (
                         <Draggable
 
                             isDragDisabled={(item.type === 'appreciation' && isAppreciationDragDisable) ||(item.type === 'welcome' && isWelcomeDragDisable)}
