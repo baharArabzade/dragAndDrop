@@ -38,6 +38,12 @@ type SampleQuestionColumnProps={
     isAppreciationDragDisable:boolean;
 }
 const SampleQuestionsColumn = ({isWelcomeDragDisable,isAppreciationDragDisable}:SampleQuestionColumnProps):JSX.Element => {
+    const [language,setLanguage]=useState<string>('PERSIAN')
+    const translations = (language === 'english'?englishTranslations:persianTranslations)
+    const [questions,setQuestions]=useState([])
+    useEffect(()=>{
+        setQuestions(sampleQuestions.map(({id,type})=>({id,type,content:type ==='question'?translations.questions[id]?.titleText:translations[id].titleText})))
+    },[])
     return (
         <Droppable droppableId="questionsBox" isDropDisabled={true}>
             {(provided) => (
