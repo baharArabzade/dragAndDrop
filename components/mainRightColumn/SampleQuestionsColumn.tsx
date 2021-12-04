@@ -60,8 +60,8 @@ const SampleQuestionsColumn = ({isWelcomeDragDisable,isAppreciationDragDisable}:
                             {(provided, snapshot) => (
                                 <React.Fragment>
                                     <div
-                                        className={`${styles.item_Basic} ${snapshot.isDragging && styles.dragging_item } ${ (item.type ==='appreciation' || item.type === 'welcome') && styles.apply_width} 
-                                         ${((item.type === 'appreciation' && isAppreciationDragDisable) || (item.type === 'welcome' && isWelcomeDragDisable))&&styles.disable_drag}
+                                        className={`${classes.item_Basic} ${snapshot.isDragging && classes.dragging_item } ${ (item.type ==='appreciation' || item.type === 'welcome') && classes.apply_width} 
+                                         ${((item.type === 'appreciation' && isAppreciationDragDisable) || (item.type === 'welcome' && isWelcomeDragDisable))&&classes.disable_drag}
                                         `}
                                         ref={provided.innerRef}
                                         {...provided.draggableProps}
@@ -71,7 +71,7 @@ const SampleQuestionsColumn = ({isWelcomeDragDisable,isAppreciationDragDisable}:
                                         {item.content}
                                     </div>
                                     {snapshot.isDragging && (
-                                        <div  className={`${styles.item_Basic}  ${ (item.type ==='appreciation' || item.type === 'welcome') && styles.apply_width} `} >{item.content}</div>
+                                        <div  className={`${classes.item_Basic}  ${ (item.type ==='appreciation' || item.type === 'welcome') && classes.apply_width} `} >{item.content}</div>
                                     )}
                                 </React.Fragment>
                             )}
