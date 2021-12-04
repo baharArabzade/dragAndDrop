@@ -42,7 +42,7 @@ const SampleQuestionsColumn = ({isWelcomeDragDisable,isAppreciationDragDisable}:
     return (
         <Droppable droppableId="questionsBox" isDropDisabled={true}>
             {(provided) => (
-                <div className={styles.questionsBox}
+                <div className={classes.questionsBox}
                      ref={provided.innerRef}
                 >
                     {sampleQuestions.map((item, index) => (
