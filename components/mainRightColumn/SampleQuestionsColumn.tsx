@@ -7,29 +7,24 @@ import styles from "styles/components/sampleQuestionsColumn.module.scss";
 export const sampleQuestions = [
     {
 
-        id: uuid(),
-        content: 'صفحه خوش آمد گویی',
+        id: 'welcomePage',
         type: 'welcome'
 
     },
     {
-        id: uuid(),
-        content: 'چند گزینه ای',
-        type: 'exam'
+        id:'multipleChoiceQuestion',
+        type: 'question'
     },
     {
-        id: uuid(),
-        content: 'طیفی',
-        type: 'exam'
+        id:'number',
+        type: 'question'
     },
     {
-        id: uuid(),
-        content: 'عدد',
-        type: 'exam'
+        id:'shortAnswer',
+        type: 'question'
     },
     {
-        id: 'appreciation',
-        content: 'صفجه تشکر',
+        id: 'appreciationPage',
         type: 'appreciation'
 
     }
