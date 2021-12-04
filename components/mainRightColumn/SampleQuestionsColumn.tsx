@@ -3,6 +3,9 @@ import {Draggable, Droppable} from "react-beautiful-dnd";
 import uuid from "uuid/v4";
 //style
 import styles from "styles/components/sampleQuestionsColumn.module.scss";
+//translations
+import {translations as persianTranslations} from "translations/persian";
+import {translations as englishTranslations} from "translations/english";
 
 export const sampleQuestions = [
     {
