@@ -1,6 +1,5 @@
 import React, {useEffect, useState} from "react";
 import {Draggable, Droppable} from "react-beautiful-dnd";
-import uuid from "uuid/v4";
 //style
 import classes from "styles/components/sampleQuestionsColumn.module.scss";
 //translations
