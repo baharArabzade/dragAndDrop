@@ -14,9 +14,7 @@ class MyDocument extends Document {
     render() {
         return (
             <Html>
-                <Head>
-                    <title>dragAndDrop</title>
-                </Head>
+                <Head/>
                 <body>
                 <Main/>
                 <NextScript/>
