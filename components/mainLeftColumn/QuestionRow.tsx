@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Draggable} from "react-beautiful-dnd";
 //style
 import classes from "styles/components/questionRow.module.scss";
@@ -8,21 +8,20 @@ import {QuestionRowPropsTypes} from "types/componentType";
 import {translations as persianTranslations} from "translations/persian";
 import {translations as englishTranslations} from "translations/english";
 
-const QuestionRow = ({item, index,isDragDisabled}:QuestionRowPropsTypes):JSX.Element => {
-    const language = 'english'
-    const translations = (language === 'english'?englishTranslations:persianTranslations)
+const QuestionRow = ({question, index,}: QuestionRowPropsTypes): JSX.Element => {
+    const [language,setLanguage] = useState<string>('persian')
+    const translations = (language === 'english' ? englishTranslations : persianTranslations)
     return (
         <Draggable
-            isDragDisabled={isDragDisabled}
-            key={item.id}
-            draggableId={item.id}
+            key={question.id}
+            draggableId={question.id}
             index={index}>
             {(
                 provided,
                 snapshot
             ) => (
                 <div
-                    className={`${classes.question_row} ${snapshot.isDragging&&classes.dragging_question}`}
+                    className={`${classes.question_row} ${snapshot.isDragging && classes.dragging_question}`}
 
                     ref={
                         provided.innerRef
@@ -31,7 +30,7 @@ const QuestionRow = ({item, index,isDragDisabled}:QuestionRowPropsTypes):JSX.Ele
                     {...provided.dragHandleProps}
 
                 >
-                    {item.content}
+                    {translations.questions[question.questionType].titleText }
                 </div>
             )}
         </Draggable>
