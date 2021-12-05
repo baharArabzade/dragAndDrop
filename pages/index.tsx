@@ -1,144 +1,174 @@
 import React, {useEffect, useState} from 'react';
 import uuid from 'uuid/v4';
 import {DragDropContext, Droppable} from 'react-beautiful-dnd';
-import SampleQuestionsColumn, {sampleQuestions} from "components/mainRightColumn/SampleQuestionsColumn"
+import Toggle from 'react-toggle'
+import RightNavbar, {defaultQuestions} from "@components/mainRightColumn/RightNavbar"
 import QuestionRow from "components/mainLeftColumn/QuestionRow";
 //style
-import styles from "styles/index.module.scss"
+import classes from "styles/index.module.scss"
 //types
-import {droppableItemInfoType, listOfItemsType} from "types/componentType";
+import {
+    appreciationPageDetailsType,
+    droppableItemInfoType,
+    listOfItemsType,
+    questionsDetailsType,
+    welcomePageDetailsType
+} from "types/componentType";
+//translations
+import {translations as persianTranslations} from "translations/persian";
+import {translations as englishTranslations, translations as englishTranslators} from "translations/english";
 
 const BuildPage = (): JSX.Element => {
+    const [language, setLanguage] = useState<string>('persian')
+    const [appreciationPageDetails, setAppreciationPageDetails] = useState<appreciationPageDetailsType>([])
+    const [questionsDetails, setQuestionsDetails] = useState<questionsDetailsType>([])
+    const [welcomePageDetails, setWelcomePageDetails] = useState<welcomePageDetailsType>([])
 
-    const [data, setData] = useState<object>({'welcome': [], 'exam': [], 'appreciation': []})
     const [draggedItemType, setDraggedItemType] = useState<string>('')
-    const [hasAppreciation, setHasAppreciation] = useState<boolean>(false)
-    const [hasWelcome, setHasWelcome] = useState<boolean>(false)
+    const translations = (language === 'english' ? englishTranslations : persianTranslations)
 
-    const reorder = (list:listOfItemsType, startIndex: number, endIndex: number): listOfItemsType=> {
-        const result = list;
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
-        return result;
+    const reorderQuestions = (startIndex: number, endIndex: number): void => {
+        const [removed] = questionsDetails.splice(startIndex, 1);
+        let newQuestions = questionsDetails
+        newQuestions.splice(endIndex, 0, removed);
+        setQuestionsDetails(newQuestions)
+
     };
 
-    const copy = (source:listOfItemsType, destination: listOfItemsType, droppableSource:droppableItemInfoType, droppableDestination: droppableItemInfoType): listOfItemsType => {
-        const destClone = Array.from(destination);
-        const item = source[droppableSource.index];
-        destClone.splice(droppableDestination.index, 0, {...item, id: uuid()});
+    const addQuestion = (questionType: string, destinationIndex: number) => {
+        let newQuestions = questionsDetails
+        newQuestions.splice(destinationIndex, 0, {questionType, id: uuid()})
+        setQuestionsDetails(newQuestions)
+    };
+    const addWelcomePage = () => {
+        setWelcomePageDetails([{id: uuid()}])
+    }
+    const addAppreciationPage = () => {
+        setAppreciationPageDetails([{id: uuid()}])
+    }
 
-        switch (item.type) {
-            case 'welcome':
-                setHasWelcome(true)
-                break;
-            case 'appreciation':
-                setHasAppreciation(true)
-
+    const onDragStart = (startDragActionDetails) => {
+        console.log('resualt', startDragActionDetails)
+        const {droppableId} = startDragActionDetails.source
+        if (droppableId === 'rightNavbar') {
+            switch (startDragActionDetails.draggableId) {
+                case 'welcomePage':
+                    setDraggedItemType('welcomePage')
+                    break
+                case 'appreciationPage':
+                    setDraggedItemType('appreciationPage')
+                    break
+                default:
+                    setDraggedItemType('question')
+                    break
+            }
         }
-        return destClone;
-
-    };
-
-    const move = (source:listOfItemsType, destination: listOfItemsType, droppableSource: droppableItemInfoType, droppableDestination: droppableItemInfoType) => {
-        const sourceClone = Array.from(source);
-        const destClone = Array.from(destination);
-        const [removed] = sourceClone.splice(droppableSource.index, 1);
-
-        destClone.splice(droppableDestination.index, 0, removed);
-
-        const result = {};
-        result[droppableSource.droppableId] = sourceClone;
-        result[droppableDestination.droppableId] = destClone;
-
-        return result;
-    };
-    const findItemType = (droppableId:string, index:number):string => {
-        switch (droppableId) {
-            case 'questionsBox':
-                return sampleQuestions[index].type
-            default:
-                return data[droppableId][index].type
+        if (droppableId === 'questionHolder') {
+            setDraggedItemType('question')
         }
 
     }
-    const onDragStart = (result:any) => {
-        const {droppableId, index} = result.source
-        setDraggedItemType(findItemType(droppableId, index))
+    useEffect(() => {
+        console.log('type', draggedItemType)
+    }, [draggedItemType])
+    const onDragEnd = (dragActionDetails) => {
 
-
-    }
-    const onDragEnd = (result:any) => {
-        const {source, destination} = result;
+        const {source, destination, draggableId} = dragActionDetails;
+        console.log('action', dragActionDetails)
         if (!destination) {
             return;
         }
-        let newData = data
-        switch (source.droppableId) {
-            case destination.droppableId:
-                newData[destination.droppableId] = reorder(
-                    data[source.droppableId],
-                    source.index,
-                    destination.index
-                )
-                break;
 
-            case 'questionsBox':
-                newData[destination.droppableId] = copy(
-                    sampleQuestions,
-                    data[destination.droppableId],
-                    source,
-                    destination
-                )
-                setData(newData)
-                break;
+        if (source.droppableId === 'rightNavbar') {
+            switch (draggableId) {
+                case 'welcomePage':
+                    if (destination.droppableId === 'welcomePageHolder') {
+                        addWelcomePage()
+                    }
 
-            default:
-                let changedData = move(
-                    data[source.droppableId],
-                    data[destination.droppableId],
-                    source,
-                    destination
-                )
-                newData[source.droppableId] = changedData[source.droppableId]
-                newData[destination.droppableId] = changedData[destination.droppableId]
-                setData(newData)
-                break;
+                    break;
+                case 'appreciationPage':
+                    destination.droppableId === 'appreciationPageHolder' && addAppreciationPage()
+                    break;
+                default: //for questions
+                    destination.droppableId === 'questionsHolder' && addQuestion(
+                        defaultQuestions[source.index].questionType,
+                        destination.index
+                    )
+                    break;
+
+            }
+        } else if (source.droppableId === 'questionsHolder') {
+            console.log('*****************')
+            reorderQuestions(
+                source.index,
+                destination.index
+            )
         }
+
+
     };
+    useEffect(() => {
+        console.log(language)
+    }, [language])
     return (
+        <>
+            <Toggle
+                id='englishLanguage'
+                defaultChecked={false}
+                onChange={() => setLanguage((language) => language === 'english' ? 'persian' : 'english')}
+            />
+            <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
+                <RightNavbar isAppreciationDragDisable={appreciationPageDetails.length ? true : false}
+                             isWelcomeDragDisable={welcomePageDetails.length ? true : false}/>
+                <div className={classes.form_container}>
+                    <Droppable key={'welcomePageHolder'} droppableId={'welcomePageHolder'}
+                               isDropDisabled={(draggedItemType !== 'welcomePage') || welcomePageDetails.length}>
+                        {(provided) => (
+                            <div className={classes.list}
+                                 ref={provided.innerRef}
+                            >
+                                {welcomePageDetails.length ?
+                                    <div className={classes.welcome_page_row}>
+                                        {translations.welcomePage.titleText}
+                                    </div> : ''
+                                }
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                    <Droppable key={'questionsHolder'} droppableId={'questionsHolder'}
+                               isDropDisabled={draggedItemType !== 'question'}>
+                        {(provided) => (
+                            <div className={classes.questions_holder}
+                                 ref={provided.innerRef}
+                            >
+                                {questionsDetails.length ? questionsDetails.map((question, index) => (
+                                    <QuestionRow question={question} index={index}/>
+                                )) : ''}
+                                {provided.placeholder}
+                            </div>
+                        )}
+                    </Droppable>
+                    <Droppable key={'appreciationPageHolder'} droppableId={'appreciationPageHolder'}
+                               isDropDisabled={draggedItemType !== 'appreciationPage' || appreciationPageDetails.length}>
+                        {(provided) => (
+                            <div className={classes.list}
+                                 ref={provided.innerRef}
+                            >
+                                {appreciationPageDetails.length ?
+                                    <div className={classes.welcome_page_row}>
+                                        {translations.appreciationPage.titleText}
+                                    </div> : ''}
+                                {provided.placeholder}
 
-        <DragDropContext onDragEnd={onDragEnd} onDragStart={onDragStart}>
-            <SampleQuestionsColumn isAppreciationDragDisable={hasAppreciation} isWelcomeDragDisable={hasWelcome}/>
-            <div style={{marginRight: '400px', padding: '10px'}}>
-                {Object.keys(data).map((list) => {
-                    return (
-                        <Droppable key={list} droppableId={list} isDropDisabled={draggedItemType !== list}>
-                            {(provided) => (
-                                <div className={styles.list}
-                                     ref={provided.innerRef}
-                                >
+                            </div>
 
-                                    {data[list].length ?
-                                        data[list].map(
-                                            (item, index) => (
-                                                <QuestionRow item={item} index={index}
-                                                             isDragDisabled={(list === 'welcome' && hasWelcome) || (list === 'appreciation' && hasAppreciation)}/>
-                                            )
-                                        ) : <></>}
-                                    {!((list === 'welcome' && hasWelcome) || (list === 'appreciation' && hasAppreciation)) &&
-                                    <div className={styles.place_holder}>
-                                        Drop items here
-                                    </div>}
-
-                                    {provided.placeholder}
-                                </div>
-                            )}
-                        </Droppable>
-                    );
-                })}
-            </div>
-        </DragDropContext>
-
+                        )}
+                    </Droppable>
+                </div>
+            </DragDropContext>
+        </>
     );
 
 }
