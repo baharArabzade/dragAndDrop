@@ -1,37 +1,36 @@
 export const translations = {
-    placeHolder:{
+    placeHolder: {
         welcomePage: {
-            title: 'Welcome Page Place holder',
+            titleText: 'Welcome Page Place holder',
         },
         appreciationPage: {
             titleText: "Appreciation page place holder",
         },
-        question:{
-            titleText:"Question placeholder",
+        question: {
+            titleText: "Question placeholder",
         }
 
     },
     welcomePage: {
-        title: 'Welcome Page',
+        titleText: 'Welcome Page',
     },
     appreciationPage: {
-        TitleText: "Appreciation page",
+        titleText: "Appreciation page",
     },
     questions: {
         multipleChoiceQuestion: {
-            title: "Multiple choice question",
-            confirmButtonText: "OK",
+            titleText: "Multiple choice question",
         },
-        textQuestion: {
-            longAnswer: {
-                titleText: "Long answer",
-            },
-            number: {
-                titleText: "Number",
-            },
-            shortAnswer: {
-                titleText: "Short answer",
-            },
+
+        longAnswer: {
+            titleText: "Long answer",
         },
+        number: {
+            titleText: "Number",
+        },
+        shortAnswer: {
+            titleText: "Short answer",
+        },
+
     }
 }
