@@ -1,5 +1,6 @@
 @import "rightNavbar.module";
 .question_row{
+  //margin-bottom: 40px;
   align-items: flex-start;
   align-content: flex-start;
   line-height: 1.5;
@@ -9,7 +10,6 @@
   background-color: #f0f0f0;
   text-align: center;
   font-size: 13px;
-  height: 30px;
   width: 100%;
   vertical-align: middle;
   border-radius: 3px;
@@ -17,4 +17,19 @@
 .dragging_question{
   opacity:85%;
   border: 1px dashed #aaa4a9;
+}
+.group{
+  align-items: flex-start;
+  align-content: flex-start;
+  line-height: 1.5;
+  margin-bottom: 30px;
+  padding-bottom: 30px;
+  //padding: 5px 0 0 0 !important;
+  border: 1px solid #aaa4a9;
+  background-color: green;
+  font-size: 13px;
+  width: 80%;
+  vertical-align: middle;
+  border-radius: 3px;
+
 }

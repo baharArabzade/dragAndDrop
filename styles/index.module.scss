@@ -45,13 +45,16 @@
   border-Radius: 3px;
   flex: 0 0 150px;
 }
-.list {
-  background: $gray_light;
-  padding: 10px;
-  margin-bottom: 45px;
-  border-Radius: 3px;
-  flex: 0 0 150px;
-
+.right_Navbar {
+  width: 400px;
+  margin: 0 0 0 0px;
+  padding: 24px;
+  background-color: $gray_background;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  align-content: center;
 }
 .place_holder{
   text-align: center;

@@ -1,22 +1,16 @@
+@import "styles/variables";
 .default_question {
-  border-radius: 3px;
-  user-select: none;
-  align-items: flex-start;
-  align-content: flex-start;
-  line-height: 1.5;
-  margin: 10px 10px 10px 10px;
-  padding: 5px 0 0 0 !important;
-  border: 1px solid #aaa4a9;
-  background-color: #f0f0f0;
+  width: 168px;
+  height: 40px;
+  margin: 16px 16px 16px 0;
+  padding: 4px 4px 4px 4px;
+  border-radius: 8px;
+  background-color:$white;
   text-align: center;
-  font-size: 13px;
-  height: 30px;
-  width: 190px;
   vertical-align: middle;
 }
 
 .questionsBox {
-
   border-left: 1px solid #cac4c9;
   background:#FFF;
   position: absolute;
