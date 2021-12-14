@@ -8,6 +8,10 @@ export const translations = {
         },
         question: {
             titleText: "نوع سوال مورد نظر خود را از ستون سمت راست به این جا بکشید",
+        },
+        groupQuestion: {
+            titleText: "سوال زیرگروه",
+
         }
     },
     welcomePage: {
@@ -28,6 +32,15 @@ export const translations = {
         },
         number: {
             titleText: "عدد"
+        },
+        group: {
+            titleText: 'گروه سوال'
+        },
+        welcomePage: {
+            titleText: 'صفحه خوش آمد گویی',
+        },
+        appreciationPage: {
+            titleText: "صفحه تشکر",
         },
 
 
