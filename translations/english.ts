@@ -8,6 +8,10 @@ export const translations = {
         },
         question: {
             titleText: "Question placeholder",
+        },
+        groupQuestion: {
+            titleText: "groupQuestion placeholder",
+
         }
 
     },
@@ -30,6 +34,15 @@ export const translations = {
         },
         shortAnswer: {
             titleText: "Short answer",
+        },
+        group: {
+            titleText: 'group question'
+        },
+        welcomePage: {
+            titleText: 'Welcome Page',
+        },
+        appreciationPage: {
+            titleText: "Appreciation page",
         },
 
     }
