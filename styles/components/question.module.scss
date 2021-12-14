@@ -1,10 +1,11 @@
 @import "rightNavbar.module";
-.question_row{
+
+.question_row {
   //margin-bottom: 40px;
   align-items: flex-start;
   align-content: flex-start;
   line-height: 1.5;
-  margin-top: 10px ;
+  margin-top: 10px;
   padding: 5px 0 0 0 !important;
   border: 1px solid #aaa4a9;
   background-color: #f0f0f0;
@@ -13,23 +14,24 @@
   width: 100%;
   vertical-align: middle;
   border-radius: 3px;
+  cursor: move;
 }
-.dragging_question{
-  opacity:85%;
+
+.dragging_question {
+  opacity: 85%;
   border: 1px dashed #aaa4a9;
 }
-.group{
+
+.group {
   align-items: flex-start;
   align-content: flex-start;
-  line-height: 1.5;
   margin-bottom: 30px;
   padding-bottom: 30px;
   //padding: 5px 0 0 0 !important;
-  border: 1px solid #aaa4a9;
+  border-right: 1px solid #aaa4a9;
   background-color: green;
   font-size: 13px;
-  width: 80%;
-  vertical-align: middle;
+  width: 100%;
   border-radius: 3px;
 
 }
