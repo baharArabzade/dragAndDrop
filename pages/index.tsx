@@ -15,7 +15,7 @@ import RightNavbarItem from "components/RightNavbarItem";
 import classes from "styles/index.module.scss"
 //types
 import {
-    appreciationPageDetailsType,
+    appreciationPageDetailsType, questionDetailType,
     questionsDetailsType, welcomePageDetailsType,
 } from "types/componentType";
 
@@ -24,13 +24,10 @@ const BuildPage = (): JSX.Element => {
     const [welcomePage, setWelcomePage] = useState<welcomePageDetailsType>([])
     const [appreciationPage, setAppreciationPage] = useState<appreciationPageDetailsType>([])
     const addQuestion = (questionType: string): void => {
-        let newQuestion = {}
+        let newQuestion: questionDetailType = {questionType, id: uuid()}
         if (questionType === 'group')
-            newQuestion = {questionType, id: uuid(), subQuestions: []}
-        else {
-            newQuestion = {questionType, id: uuid()}
-        }
-        setQuestionsDetails((prevQuestions: questionsDetailsType): questionsDetailsType => [...prevQuestions, newQuestion])
+            newQuestion.subQuestions = []
+        setQuestionsDetails((prevQuestions): questionsDetailsType => [...prevQuestions, newQuestion])
     };
     const addSubQuestionToGroupQuestion = (subQuestion, groupQuestionId) => {
         let index = questionsDetails.findIndex(question => question.id === groupQuestionId)

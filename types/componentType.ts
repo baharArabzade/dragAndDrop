@@ -35,14 +35,15 @@ export type appreciationPageDetailsType = Array<{
     id: string,
     questionType: string
 }>
-export type questionsDetailsType = Array<{
+export type questionDetailType = {
     id: string;
     questionType: string
     subQuestions?: Array<{
         id: string;
         questionType: string;
     }>
-}>
+}
+export type questionsDetailsType = Array<questionDetailType>
 export type dragItemType = {
     id: string;
     type: string;
