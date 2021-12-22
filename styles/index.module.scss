@@ -76,6 +76,15 @@
   margin: 10px 0 20px;
 }
 
+.question_row {
+  direction: rtl;
+  border: 1px dashed gray;
+  padding: 0.5rem 1rem;
+  margin-bottom: 0.5rem;
+  backgroundColor: white;
+  flex-direction: row;
+}
+
 .place_holder {
   text-align: center;
   border: 1px dashed #4d9db5;
