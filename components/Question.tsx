@@ -23,7 +23,6 @@ const RenderQuestion = ({
   const originalIndex = findQuestion(id).index;
   const originalIndexInGroup = findQuestion(id).indexInGroup;
   const questionType = question.questionType;
-  console.log("iss", isSubQuestion);
   const [{}, drag] = useDrag(
     () => ({
       type: questionType,
@@ -35,15 +34,13 @@ const RenderQuestion = ({
         const { id: droppedId, originalIndex, originalIndexInGroup } = item;
         const didDrop = monitor.didDrop();
         if (!didDrop) {
-          console.log("end", item);
-          !item.id
-            ? console.log("end drop new")
-            : handleDraggingQuestionAction({
-                id: droppedId,
-                atIndex: originalIndex,
-                atIndexInGroup: originalIndexInGroup,
-                action: "reOrder",
-              });
+          !!item.id &&
+            handleDraggingQuestionAction({
+              id: droppedId,
+              atIndex: originalIndex,
+              atIndexInGroup: originalIndexInGroup,
+              action: "reOrder",
+            });
         }
       },
     }),
@@ -112,7 +109,7 @@ const RenderQuestion = ({
         ref={(node) => drag(drop(node))}
       >
         {translations.questions[question.questionType].titleText}
-        <p>{id}</p>
+        {id ? <p>{id}</p> : <p>"new Question"</p>}
       </div>
     </>
   );

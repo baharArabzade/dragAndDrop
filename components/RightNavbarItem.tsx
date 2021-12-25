@@ -10,17 +10,27 @@ import { translations as persianTranslations } from "translations/persian";
 
 const RightNavbarItem = ({
   questionType,
+  handleDraggingQuestionAction,
 }: RightNavbarPropsTypes): JSX.Element => {
   const [language, setLanguage] = useState("persian");
   const translations =
     language === "english" ? englishTranslations : persianTranslations;
-  const [{ isDragging }, drag] = useDrag({
-    type: questionType,
-    item: { questionType },
-    collect: (monitor) => ({
-      isDragging: monitor.isDragging(),
-    }),
-  });
+  const [{ isDragging }, drag] = useDrag(
+    {
+      type: questionType,
+      item: { questionType },
+      end: (item, monitor) => {
+        const didDrop = monitor.didDrop();
+        if (!didDrop) {
+          handleDraggingQuestionAction({ action: "deletePreViewQuestion" });
+        }
+      },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+    },
+    [handleDraggingQuestionAction, questionType]
+  );
   return (
     <div
       className={`${classes.default_question} ${

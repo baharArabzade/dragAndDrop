@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from "react";
+import React, { useState, useCallback } from "react";
 import update from "immutability-helper";
 import { HTML5Backend as backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
@@ -131,10 +131,6 @@ const BuildPage = (): JSX.Element => {
     },
     [questionsDetails]
   );
-  useEffect(() => {
-    console.log("changed", questionsDetails);
-  }, [questionsDetails]);
-
   const handleDraggingQuestionAction = useCallback(
     ({
       id,
@@ -143,6 +139,29 @@ const BuildPage = (): JSX.Element => {
       atIndexInGroup,
       action,
     }: HandleDraggingQuestionActionInputTypes): void => {
+      if (action === "deletePreViewQuestion") {
+        const preViewQuestion = findPreViewQuestion();
+        if (preViewQuestion.index === -1) return;
+        if (preViewQuestion.indexInGroup === -1) {
+          setQuestionsDetails(
+            update(questionsDetails, {
+              $splice: [[preViewQuestion.index, 1]],
+            })
+          );
+        } else {
+          setQuestionsDetails(
+            update(questionsDetails, {
+              [preViewQuestion.index]: {
+                subQuestions: {
+                  $splice: [[preViewQuestion.indexInGroup, 1]],
+                },
+              },
+            })
+          );
+        }
+
+        return;
+      }
       if (action === "afterPreViewAdd") {
         if (atIndexInGroup === -1) {
           setQuestionsDetails(
@@ -151,7 +170,6 @@ const BuildPage = (): JSX.Element => {
             })
           );
         } else {
-          console.log("atIndex", atIndex, atIndexInGroup);
           setQuestionsDetails(
             update(questionsDetails, {
               [atIndex]: {
@@ -278,7 +296,10 @@ const BuildPage = (): JSX.Element => {
       <div>
         <div className={classes.right_Navbar}>
           {RIGHT_NAVBAR_ITEMS.map((question) => (
-            <RightNavbarItem questionType={question.questionType} />
+            <RightNavbarItem
+              questionType={question.questionType}
+              handleDraggingQuestionAction={handleDraggingQuestionAction}
+            />
           ))}
         </div>
         <div className={classes.form_container}>

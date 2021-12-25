@@ -1,9 +1,14 @@
 import React from "react";
-import exp from "constants";
 
 export type RenderQuestionPropsTypes = {
   id?: string;
-  handleDraggingQuestionAction;
+  handleDraggingQuestionAction?: ({
+    id,
+    questionType,
+    atIndex,
+    atIndexInGroup,
+    action,
+  }: HandleDraggingQuestionActionInputTypes) => void;
   findQuestion;
   isSubQuestion?: boolean;
   question: {
@@ -18,6 +23,9 @@ export type RenderQuestionPropsTypes = {
   index?: number;
 };
 export type RightNavbarPropsTypes = {
+  handleDraggingQuestionAction?: ({
+    action,
+  }: HandleDraggingQuestionActionInputTypes) => void;
   questionType: string;
 };
 export type DropZonePropsTypes = {
@@ -49,15 +57,6 @@ export type AppreciationPageDetailsType = {
   id: string;
   questionType: string;
 };
-export type QuestionDetailsType = Array<{
-  id?: string;
-  questionType: string;
-  subQuestions?: Array<{
-    id?: string;
-    questionType: string;
-  }>;
-}>;
-
 export type QuestionType = {
   id?: string;
   questionType: string;
@@ -74,14 +73,6 @@ export type HandleDraggingQuestionActionInputTypes = {
   atIndexInGroup?: number;
   action: string;
 };
-export type QuestionsDetailsType = Array<{
-  id?: string;
-  questionType: string;
-  subQuestions?: Array<{
-    id: string;
-    questionType: string;
-  }>;
-}>;
 export type DragItemType = {
   id?: string;
   originalIndex: number;
