@@ -1,20 +1,18 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
 //style
 import classes from "styles/components/rightNavbar.module.scss";
 //types
 import { RightNavbarPropsTypes } from "types/componentType";
 //translations
-import { translations as englishTranslations } from "translations/english";
 import { translations as persianTranslations } from "translations/persian";
 
 const RightNavbarItem = ({
   questionType,
   handleDraggingQuestionAction,
 }: RightNavbarPropsTypes): JSX.Element => {
-  const [language, setLanguage] = useState("persian");
-  const translations =
-    language === "english" ? englishTranslations : persianTranslations;
+  const [inValidDrop, setInValidDrop] = useState<boolean>(false);
+  const translations = persianTranslations;
   const [{ isDragging }, drag] = useDrag(
     {
       type: questionType,
@@ -22,7 +20,7 @@ const RightNavbarItem = ({
       end: (item, monitor) => {
         const didDrop = monitor.didDrop();
         if (!didDrop) {
-          handleDraggingQuestionAction({ action: "deletePreViewQuestion" });
+          setInValidDrop(true);
         }
       },
       collect: (monitor) => ({
@@ -31,6 +29,10 @@ const RightNavbarItem = ({
     },
     [handleDraggingQuestionAction, questionType]
   );
+  useEffect(() => {
+    handleDraggingQuestionAction({ action: "deletePreViewQuestion" });
+    setInValidDrop(false);
+  }, [inValidDrop]);
   return (
     <div
       className={`${classes.default_question} ${
