@@ -25,6 +25,7 @@ const RightNavbarItem = ({
       },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
+        inValidDrop: monitor.getDropResult(),
       }),
     },
     [handleDraggingQuestionAction, questionType]
