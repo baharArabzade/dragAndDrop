@@ -1,14 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
-
 //style
 import classes from "styles/components/question.module.scss";
 // types
 import { DragItemType, RenderQuestionPropsTypes } from "types/componentType";
 //translations
 import { translations as persianTranslations } from "translations/persian";
-import { translations as englishTranslations } from "translations/english";
+//constants
 import { QUESTIONS_TYPES } from "components/constants";
+import { actions } from "components/constants";
 
 const RenderQuestion = ({
   question,
@@ -17,30 +17,36 @@ const RenderQuestion = ({
   findQuestion,
   isSubQuestion,
 }: RenderQuestionPropsTypes): JSX.Element => {
-  const [language, setLanguage] = useState<string>("persian");
-  const translations =
-    language === "english" ? englishTranslations : persianTranslations;
+  const translations = persianTranslations;
   const originalIndex = findQuestion(id).index;
   const originalIndexInGroup = findQuestion(id).indexInGroup;
   const questionType = question.questionType;
-  const [{}, drag] = useDrag(
+  const [inValidDrop, setInvalidDrop] = useState<boolean>(false);
+  const [revertActionData, setRevertActionData] = useState<{
+    id: string;
+    originalIndex: number;
+    originalIndexInGroup: number;
+  }>(null);
+  const [{ isDragging }, drag] = useDrag(
     () => ({
       type: questionType,
       item: { id, originalIndex, originalIndexInGroup, questionType },
       collect: (monitor) => ({
         isDragging: monitor.isDragging(),
+        inValidDrop: monitor.getDropResult(),
       }),
       end: (item, monitor) => {
         const { id: droppedId, originalIndex, originalIndexInGroup } = item;
         const didDrop = monitor.didDrop();
         if (!didDrop) {
-          !!item.id &&
-            handleDraggingQuestionAction({
+          if (!!item.id) {
+            setRevertActionData({
               id: droppedId,
-              atIndex: originalIndex,
-              atIndexInGroup: originalIndexInGroup,
-              action: "reOrder",
+              originalIndex,
+              originalIndexInGroup,
             });
+            setInvalidDrop(true);
+          }
         }
       },
     }),
@@ -52,7 +58,17 @@ const RenderQuestion = ({
       questionType,
     ]
   );
-
+  useEffect(() => {
+    if (inValidDrop) {
+      handleDraggingQuestionAction({
+        id: revertActionData.id,
+        atIndex: revertActionData.originalIndex,
+        atIndexInGroup: revertActionData.originalIndexInGroup,
+        action: actions.reOrder,
+      });
+      setInvalidDrop(false);
+    }
+  }, [inValidDrop]);
   const [{}, drop] = useDrop(
     () => ({
       drop(item: DragItemType) {
@@ -60,7 +76,7 @@ const RenderQuestion = ({
           handleDraggingQuestionAction({
             atIndex: originalIndex,
             atIndexInGroup: originalIndexInGroup,
-            action: "afterPreViewAdd",
+            action: actions.afterPreViewAdd,
           });
       },
       accept: isSubQuestion
@@ -77,19 +93,17 @@ const RenderQuestion = ({
               questionType: item.questionType,
               atIndex: overIndex,
               atIndexInGroup: overIndexInGroup,
-              action: "addNewQuestionPreview",
+              action: actions.addNewQuestionPreview,
             });
           return;
         }
         const draggedId = item.id;
-        console.log("hoverItem", item);
-
         if (draggedId !== id) {
           handleDraggingQuestionAction({
             id: draggedId,
             atIndex: overIndex,
             atIndexInGroup: overIndexInGroup,
-            action: "reOrder",
+            action: actions.reOrder,
           });
         }
       },
@@ -102,14 +116,19 @@ const RenderQuestion = ({
       questionType,
     ]
   );
+
   return (
     <>
       <div
         className={`${classes.question_row}`}
         ref={(node) => drag(drop(node))}
       >
-        {translations.questions[question.questionType].titleText}
-        {id ? <p>{id}</p> : <p>"new Question"</p>}
+        {!isDragging && (
+          <>
+            {translations.questions[question.questionType].titleText}
+            <p>{question.id}</p>
+          </>
+        )}
       </div>
     </>
   );
