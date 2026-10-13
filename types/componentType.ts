@@ -2,7 +2,12 @@ import { ReactNode } from "react";
 // constants
 import { DRAG_ACTIONS } from "components/constants";
 
-export type NormalQuestionType = "number" | "longAnswer" | "shortAnswer";
+export type NormalQuestionType =
+  | "number"
+  | "longAnswer"
+  | "shortAnswer"
+  | "multipleChoice"
+  | "email";
 export type QuestionType = NormalQuestionType | "group";
 export type PageType = "welcomePage" | "thankYouPage";
 export type BlockType = QuestionType | PageType;
@@ -63,7 +68,7 @@ export type RenderQuestionPropsTypes = {
   findQuestion: (id: string) => QuestionLocationType;
 };
 
-export type RightNavbarPropsTypes = {
+export type SidebarItemPropsTypes = {
   questionType: BlockType;
   handleDraggingQuestionAction: HandleDraggingQuestionActionType;
 };

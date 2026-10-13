@@ -38,5 +38,11 @@ export const translations = {
     shortAnswer: {
       titleText: "Short answer",
     },
+    multipleChoice: {
+      titleText: "Multiple choice",
+    },
+    email: {
+      titleText: "Email",
+    },
   },
 };

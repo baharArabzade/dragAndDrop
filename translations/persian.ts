@@ -7,13 +7,13 @@ export const translations = {
   },
   placeHolder: {
     welcomePage: {
-      titleText: "صفحه‌ خوش‌آمد گویی را از ستون سمت راست به اینجا بکشید",
+      titleText: "صفحه‌ خوش‌آمد گویی را از ستون کناری به اینجا بکشید",
     },
     thankYouPage: {
-      titleText: "صفحه‌ تشکر را از ستون سمت راست به اینجا بکشید",
+      titleText: "صفحه‌ تشکر را از ستون کناری به اینجا بکشید",
     },
     question: {
-      titleText: "نوع سوال مورد نظر خود را از ستون سمت راست به این جا بکشید",
+      titleText: "نوع سوال مورد نظر خود را از ستون کناری به این جا بکشید",
     },
     groupQuestion: {
       titleText: "سوال زیرگروه",
@@ -37,6 +37,12 @@ export const translations = {
     },
     shortAnswer: {
       titleText: "متنی با پاسخ کوتاه",
+    },
+    multipleChoice: {
+      titleText: "چند گزینه‌ای",
+    },
+    email: {
+      titleText: "ایمیل",
     },
   },
 };
