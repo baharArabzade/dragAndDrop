@@ -1,14 +1,23 @@
 # Drag-and-Drop Form Builder
 
-A small form-builder prototype built with Next.js, React, TypeScript, and React DnD. It lets users drag question types from the sidebar into a form and reorder them.
+A form builder built with Next.js, React, TypeScript, and React DnD. Users drag blocks from the sidebar onto a canvas, reorder them, and group questions together.
 
 ## Features
 
 - Welcome and thank you pages
-- Number, short-answer, long-answer, and grouped questions
-- Drag-and-drop question ordering
-- Nested questions inside a group
-- Persian interface text by default, with English translations included
+- Short answer, long answer, multiple choice, number, and email questions
+- Question groups with nested sub-questions
+- Drag-and-drop reordering, including moving questions into and out of groups
+- A placeholder that shows where a new block will land while dragging
+- English interface text, with Persian translations included
+
+## Tech stack
+
+- Next.js 12 (Pages Router) and React 17
+- TypeScript in strict mode
+- React DnD with the HTML5 backend
+- immutability-helper for nested state updates
+- SCSS modules
 
 ## Run locally
 
@@ -35,13 +44,21 @@ npm run type-check  # Check TypeScript types
 npm run lint        # Run ESLint
 ```
 
-## Main structure
+## How it works
 
-- `pages/index.tsx` – form-builder state and drag-and-drop behavior
-- `components/` – questions, drop zones, and sidebar items
-- `styles/` – SCSS modules
-- `translations/` – Persian and English interface text
+The questions live in a single `useReducer` state. Every drag interaction is dispatched as a typed drag action, such as adding a preview, moving a question, or moving it to the end of a group, and `reducers/questionsReducer.ts` turns it into the next state. The reducer is a pure function, so all the ordering and nesting rules live in one place, separate from the components.
+
+A group question can only contain normal questions, and a group cannot be dropped inside another group.
+
+## Project structure
+
+- `pages/index.tsx` – page layout and form builder state
+- `reducers/questionsReducer.ts` – drag-and-drop and ordering logic
+- `components/` – sidebar items, questions, and drop zones
+- `types/` – question, page, and drag action types
+- `translations/` – English and Persian interface text
+- `styles/` – global styles and SCSS modules
 
 ## Notes
 
-This is a prototype: form data is kept in React state and is not persisted to a backend.
+Form data is kept in React state and is not saved to a backend.
