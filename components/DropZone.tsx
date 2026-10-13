@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useDrop } from "react-dnd";
 import uuid from "uuid/v4";
 //style
@@ -6,7 +5,6 @@ import classes from "styles/index.module.scss";
 //types
 import { DragItemType, DropZonePropsTypes } from "types/componentType";
 //translations
-import { translations as englishTranslations } from "translations/english";
 import { translations as persianTranslations } from "translations/persian";
 
 const DropZone = ({
@@ -19,9 +17,7 @@ const DropZone = ({
   index,
   groupQuestionId,
 }: DropZonePropsTypes): JSX.Element => {
-  const [language, setLanguage] = useState("persian");
-  const translations =
-    language === "english" ? englishTranslations : persianTranslations;
+  const translations = persianTranslations;
   const [{ isOverCurrent }, drop] = useDrop(
     () => ({
       accept: acceptType,
@@ -41,22 +37,33 @@ const DropZone = ({
             break;
 
           case "groupQuestion":
-            isNewQuestion
-              ? addItemFunction(item.questionType, groupQuestionId)
-              : handleDraggingQuestionAction({
-                  id: item.id,
-                  atIndex: index,
-                  action: "addToEndOfGroupQuestion",
-                });
+            if (isNewQuestion) {
+              addItemFunction(item.questionType, groupQuestionId);
+              handleDraggingQuestionAction({
+                action: "deletePreViewQuestion",
+              });
+            } else {
+              handleDraggingQuestionAction({
+                id: item.id,
+                atIndex: index,
+                action: "addToEndOfGroupQuestion",
+              });
+            }
             break;
 
           case "questions":
-            isNewQuestion
-              ? addItemFunction(item.questionType)
-              : handleDraggingQuestionAction({
-                  id: item.id,
-                  action: "addToEndOfQuestions",
-                });
+            if (isNewQuestion) {
+              addItemFunction(item.questionType);
+              handleDraggingQuestionAction({
+                action: "deletePreViewQuestion",
+              });
+            } else {
+              handleDraggingQuestionAction({
+                id: item.id,
+                action: "addToEndOfQuestions",
+              });
+            }
+
             break;
         }
       },

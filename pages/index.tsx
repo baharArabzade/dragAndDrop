@@ -1,8 +1,11 @@
 import React, { useState, useCallback } from "react";
 import update from "immutability-helper";
-import { HTML5Backend as backend } from "react-dnd-html5-backend";
+import { TouchBackend } from "react-dnd-touch-backend";
+import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import uuid from "uuid/v4";
+import { usePreview } from "react-dnd-preview";
+import { isMobile } from "react-device-detect";
 //constant
 import {
   RIGHT_NAVBAR_ITEMS,
@@ -12,6 +15,7 @@ import {
   GROUP_QUESTION_TYPE,
   QUESTIONS_TYPES,
 } from "components/constants";
+import { actions } from "components/constants";
 // components
 import RenderQuestion from "components/Question";
 import DropZone from "components/DropZone";
@@ -35,6 +39,19 @@ const BuildPage = (): JSX.Element => {
   const [appreciationPage, setAppreciationPage] =
     useState<AppreciationPageDetailsType>(null);
   const translations = persianTranslations;
+  const MyPreview = () => {
+    const { display, item, style } = usePreview();
+    if (!display) {
+      return null;
+    }
+    return (
+      <div style={{ ...style, zIndex: 2 }} className={classes.question_row}>
+        {translations.questions[item.questionType].titleText}
+        {item.id}
+      </div>
+    );
+  };
+
   const addQuestion = (questionType: string): void => {
     let newQuestion: QuestionType = null;
     if (questionType === "group")
@@ -75,23 +92,25 @@ const BuildPage = (): JSX.Element => {
   };
 
   const findPreViewQuestion = useCallback(() => {
+    let index, indexInGroup;
+    index = questionsDetails.findIndex((question) => !question.id);
+    if (index !== -1)
+      return {
+        index: index,
+        indexInGroup: -1,
+        question: questionsDetails[index],
+      };
     for (let i = 0; i < questionsDetails.length; i++) {
-      if (!questionsDetails[i].id) {
-        return {
-          index: i,
-          indexInGroup: -1,
-          question: questionsDetails[i],
-        };
-      }
       if (questionsDetails[i]?.subQuestions?.length) {
-        for (let j = 0; j < questionsDetails[i].subQuestions.length; j++) {
-          if (!questionsDetails[i].subQuestions[j].id) {
-            return {
-              index: i,
-              indexInGroup: j,
-              question: questionsDetails[i].subQuestions[j],
-            };
-          }
+        indexInGroup = questionsDetails[i].subQuestions.findIndex(
+          (subQuestion) => !subQuestion.id
+        );
+        if (indexInGroup !== -1) {
+          return {
+            index: i,
+            indexInGroup: indexInGroup,
+            question: questionsDetails[i].subQuestions[indexInGroup],
+          };
         }
       }
     }
@@ -104,33 +123,35 @@ const BuildPage = (): JSX.Element => {
     (
       id: string
     ): { index: number; indexInGroup?: number; question?: QuestionType } => {
+      let index, indexInGroup;
+      index = questionsDetails.findIndex((question) => question.id === id);
+      if (index !== -1)
+        return {
+          index: index,
+          indexInGroup: -1,
+          question: questionsDetails[index],
+        };
       for (let i = 0; i < questionsDetails.length; i++) {
-        if (questionsDetails[i].id === id) {
-          return {
-            index: i,
-            indexInGroup: -1,
-            question: questionsDetails[i],
-          };
-        }
         if (questionsDetails[i]?.subQuestions?.length) {
-          for (let j = 0; j < questionsDetails[i].subQuestions.length; j++) {
-            if (questionsDetails[i].subQuestions[j].id === id) {
-              return {
-                index: i,
-                indexInGroup: j,
-                question: questionsDetails[i].subQuestions[j],
-              };
-            }
+          indexInGroup = questionsDetails[i].subQuestions.findIndex(
+            (subQuestion) => subQuestion.id === id
+          );
+          if (indexInGroup !== -1) {
+            return {
+              index: i,
+              indexInGroup: indexInGroup,
+              question: questionsDetails[i].subQuestions[indexInGroup],
+            };
           }
         }
       }
-
       return {
         index: -1,
       };
     },
     [questionsDetails]
   );
+
   const handleDraggingQuestionAction = useCallback(
     ({
       id,
@@ -139,11 +160,12 @@ const BuildPage = (): JSX.Element => {
       atIndexInGroup,
       action,
     }: HandleDraggingQuestionActionInputTypes): void => {
-      if (action === "deletePreViewQuestion") {
+      if (action === actions.deletePreViewQuestion) {
         const preViewQuestion = findPreViewQuestion();
         if (preViewQuestion.index === -1) return;
         if (preViewQuestion.indexInGroup === -1) {
           setQuestionsDetails(
+            //delete a main preViewQuestion
             update(questionsDetails, {
               $splice: [[preViewQuestion.index, 1]],
             })
@@ -151,6 +173,7 @@ const BuildPage = (): JSX.Element => {
         } else {
           setQuestionsDetails(
             update(questionsDetails, {
+              //delete a subQuestion preViewQuestion
               [preViewQuestion.index]: {
                 subQuestions: {
                   $splice: [[preViewQuestion.indexInGroup, 1]],
@@ -162,8 +185,10 @@ const BuildPage = (): JSX.Element => {
 
         return;
       }
-      if (action === "afterPreViewAdd") {
+      if (action === actions.afterPreViewAdd) {
+        //final addQuestion operation(add id for preViewQuestion)
         if (atIndexInGroup === -1) {
+          //final mainQuestion add
           setQuestionsDetails(
             update(questionsDetails, {
               [atIndex]: { $merge: { id: uuid() } },
@@ -171,6 +196,7 @@ const BuildPage = (): JSX.Element => {
           );
         } else {
           setQuestionsDetails(
+            //final subQuestion add operation
             update(questionsDetails, {
               [atIndex]: {
                 subQuestions: { [atIndexInGroup]: { $merge: { id: uuid() } } },
@@ -180,14 +206,15 @@ const BuildPage = (): JSX.Element => {
         }
         return;
       }
-      if (action === "addNewQuestionPreview") {
+      if (action === actions.addNewQuestionPreview) {
         let preViewQuestion = findPreViewQuestion();
         let question: QuestionType = { questionType };
         if (questionType === "group") {
-          question.subQuestions = [];
+          question.subQuestions = []; //add subQuestions key for groupQuestion
         }
         if (preViewQuestion.index === -1) {
           if (atIndexInGroup === -1) {
+            //add new mainQuestion
             setQuestionsDetails(
               update(questionsDetails, {
                 $splice: [[atIndex, 0, question]],
@@ -196,6 +223,7 @@ const BuildPage = (): JSX.Element => {
           } else {
             setQuestionsDetails(
               update(questionsDetails, {
+                //add new subQuestion
                 [atIndex]: {
                   subQuestions: { $splice: [[atIndexInGroup, 0, question]] },
                 },
@@ -207,21 +235,21 @@ const BuildPage = (): JSX.Element => {
       }
 
       let { question, index, indexInGroup } =
-        action === "addNewQuestionPreview"
+        action === actions.addNewQuestionPreview
           ? findPreViewQuestion()
           : findQuestion(id);
 
-      if (action === "addToEndOfGroupQuestion") {
+      if (action === actions.addToEndOfGroupQuestion) {
         atIndexInGroup = questionsDetails[atIndex].subQuestions.length;
       }
-      if (action === "addToEndOfQuestions") {
+      if (action === actions.addToEndOfQuestions) {
         atIndex = questionsDetails.length;
         atIndexInGroup = -1;
       }
       if (indexInGroup === -1) {
         if (atIndexInGroup === -1) {
-          /// 2 mainQuestion
           setQuestionsDetails(
+            //reOrder mainQuestion with main question
             update(questionsDetails, {
               $splice: [
                 [index, 1],
@@ -232,6 +260,7 @@ const BuildPage = (): JSX.Element => {
           return;
         } else {
           setQuestionsDetails(
+            //reOrder mainQuestion with subQuestion
             update(questionsDetails, {
               $splice: [[index, 1]],
               [atIndex]: {
@@ -244,6 +273,7 @@ const BuildPage = (): JSX.Element => {
       } else {
         if (atIndexInGroup === -1) {
           setQuestionsDetails(
+            //reOrder subQuestion with mainQuestion
             update(questionsDetails, {
               [index]: {
                 subQuestions: {
@@ -256,6 +286,7 @@ const BuildPage = (): JSX.Element => {
           return;
         } else {
           if (index === atIndex) {
+            //reOrder subQuestion with subQuestion in same groupQuestion
             setQuestionsDetails(
               update(questionsDetails, {
                 [index]: {
@@ -270,6 +301,7 @@ const BuildPage = (): JSX.Element => {
             );
           } else {
             setQuestionsDetails(
+              //reOrder subQuestion with subQuestion in different group
               update(questionsDetails, {
                 [index]: {
                   subQuestions: {
@@ -292,11 +324,16 @@ const BuildPage = (): JSX.Element => {
   );
 
   return (
-    <DndProvider backend={backend}>
+    <DndProvider
+      backend={isMobile ? TouchBackend : HTML5Backend}
+      options={{ enableMouseEvents: true }}
+    >
       <div>
+        {isMobile && <MyPreview />}
         <div className={classes.right_Navbar}>
           {RIGHT_NAVBAR_ITEMS.map((question) => (
             <RightNavbarItem
+              key={question.questionType}
               questionType={question.questionType}
               handleDraggingQuestionAction={handleDraggingQuestionAction}
             />
@@ -315,8 +352,9 @@ const BuildPage = (): JSX.Element => {
             />
           )}
           {questionsDetails.map((question, index) => (
-            <>
+            <div key={`${question.id}`}>
               <RenderQuestion
+                // revertQuestionsOrder={revertQuestionsOrder}
                 question={question}
                 id={question.id}
                 isSubQuestion={false}
@@ -339,6 +377,7 @@ const BuildPage = (): JSX.Element => {
                 >
                   {question.subQuestions.map((subQuestion, index) => (
                     <RenderQuestion
+                      key={subQuestion.id}
                       question={subQuestion}
                       index={index}
                       isSubQuestion={true}
@@ -351,7 +390,7 @@ const BuildPage = (): JSX.Element => {
                   ))}
                 </DropZone>
               )}
-            </>
+            </div>
           ))}
           <DropZone
             addItemFunction={(questionType) => addQuestion(questionType)}
