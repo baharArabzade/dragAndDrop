@@ -1,19 +1,17 @@
 {
   "name": "draganddrop",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "private": true,
+  "description": "Drag-and-drop form builder built with Next.js, React, TypeScript, and React DnD",
+  "author": "Bahar Arabzade",
+  "license": "ISC",
   "scripts": {
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "next lint",
     "type-check": "tsc --pretty --noEmit"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
     "immutability-helper": "^3.1.1",
     "next": "^12.3.7",
@@ -32,7 +30,6 @@
     "@types/react": "^17.0.34",
     "@typescript-eslint/eslint-plugin": "^5.3.1",
     "@typescript-eslint/parser": "^5.3.1",
-    "babel-plugin-module-resolver": "^4.1.0",
     "eslint": "^8.57.1",
     "eslint-plugin-react": "^7.27.0",
     "prettier": "2.5.1",
