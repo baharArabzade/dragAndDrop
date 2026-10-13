@@ -42,11 +42,7 @@ export type QuestionLocationType = {
 
 export type DragActionType =
   | { action: typeof DRAG_ACTIONS.removePreview }
-  | {
-      action: typeof DRAG_ACTIONS.confirmPreview;
-      atIndex: number;
-      atIndexInGroup: number;
-    }
+  | { action: typeof DRAG_ACTIONS.confirmPreview }
   | {
       action: typeof DRAG_ACTIONS.addPreview;
       questionType: QuestionType;

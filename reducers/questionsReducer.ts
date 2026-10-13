@@ -110,20 +110,24 @@ const removePreviewQuestion = (
 
 const confirmPreviewQuestion = (
   questions: QuestionDetailsType[],
-  atIndex: number,
-  atIndexInGroup: number,
   previewId: string
 ): QuestionDetailsType[] => {
-  if (atIndexInGroup === -1) {
+  const { index, indexInGroup } = findPreviewQuestion(questions);
+
+  if (index === -1) {
+    return questions;
+  }
+
+  if (indexInGroup === -1) {
     return update(questions, {
-      [atIndex]: { $merge: { id: previewId } },
+      [index]: { $merge: { id: previewId } },
     });
   }
 
   return update(questions, {
-    [atIndex]: {
+    [index]: {
       subQuestions: {
-        [atIndexInGroup]: { $merge: { id: previewId } },
+        [indexInGroup]: { $merge: { id: previewId } },
       },
     },
   });
@@ -244,12 +248,7 @@ const handleDraggingQuestion = (
       return questions;
     }
 
-    return confirmPreviewQuestion(
-      questions,
-      dragAction.atIndex,
-      dragAction.atIndexInGroup,
-      previewId
-    );
+    return confirmPreviewQuestion(questions, previewId);
   }
 
   if (dragAction.action === DRAG_ACTIONS.addPreview) {

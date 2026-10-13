@@ -135,7 +135,7 @@ const FormBuilderPage = (): JSX.Element => {
                   handleDraggingQuestionAction={handleDraggingQuestionAction}
                   findQuestion={findQuestion}
                 />
-                {question.questionType === GROUP_QUESTION && (
+                {question.questionType === GROUP_QUESTION && question.id && (
                   <DropZone
                     index={index}
                     acceptType={NORMAL_QUESTION_TYPES}

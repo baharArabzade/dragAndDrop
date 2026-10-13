@@ -58,8 +58,6 @@ const Question = ({
         }
 
         handleDraggingQuestionAction({
-          atIndex: originalIndex,
-          atIndexInGroup: originalIndexInGroup,
           action: DRAG_ACTIONS.confirmPreview,
         });
       },
@@ -94,14 +92,7 @@ const Question = ({
         });
       },
     }),
-    [
-      id,
-      originalIndex,
-      originalIndexInGroup,
-      isSubQuestion,
-      findQuestion,
-      handleDraggingQuestionAction,
-    ]
+    [id, isSubQuestion, findQuestion, handleDraggingQuestionAction]
   );
 
   const questionClassName = [
