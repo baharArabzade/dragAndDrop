@@ -9,7 +9,7 @@ import {
   RenderQuestionPropsTypes,
 } from "types/componentType";
 // translations
-import { translations as persianTranslations } from "translations/persian";
+import { translations as englishTranslations } from "translations/english";
 // constants
 import {
   DRAG_ACTIONS,
@@ -23,7 +23,7 @@ const RenderQuestion = ({
   findQuestion,
   isSubQuestion,
 }: RenderQuestionPropsTypes): JSX.Element => {
-  const translations = persianTranslations;
+  const translations = englishTranslations;
   const { id, questionType } = question;
   const originalIndex = findQuestion(id).index;
   const originalIndexInGroup = findQuestion(id).indexInGroup;

@@ -7,14 +7,14 @@ import classes from "styles/components/sidebar.module.scss";
 // types
 import { SidebarItemPropsTypes } from "types/componentType";
 // translations
-import { translations as persianTranslations } from "translations/persian";
+import { translations as englishTranslations } from "translations/english";
 
 const SidebarItem = ({
   questionType,
   handleDraggingQuestionAction,
 }: SidebarItemPropsTypes): JSX.Element => {
   const [inValidDrop, setInValidDrop] = useState<boolean>(false);
-  const translations = persianTranslations;
+  const translations = englishTranslations;
   const [{ isDragging }, drag] = useDrag(
     {
       type: questionType,

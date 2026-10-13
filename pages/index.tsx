@@ -37,7 +37,7 @@ import {
   PageDetailsType,
   QuestionType,
 } from "types/componentType";
-import { translations as persianTranslations } from "translations/persian";
+import { translations as englishTranslations } from "translations/english";
 
 const BuildPage = (): JSX.Element => {
   const [questionsDetails, dispatchQuestions] = useReducer(
@@ -46,7 +46,7 @@ const BuildPage = (): JSX.Element => {
   );
   const [welcomePage, setWelcomePage] = useState<PageDetailsType>(null);
   const [thankYouPage, setThankYouPage] = useState<PageDetailsType>(null);
-  const translations = persianTranslations;
+  const translations = englishTranslations;
   const MyPreview = () => {
     const preview = usePreview<DragItemType>();
     if (!preview.display) {

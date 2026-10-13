@@ -14,7 +14,7 @@ import {
   DropZonePropsTypes,
 } from "types/componentType";
 // translations
-import { translations as persianTranslations } from "translations/persian";
+import { translations as englishTranslations } from "translations/english";
 
 const DropZone = <T extends BlockType>({
   addItemFunction,
@@ -24,7 +24,7 @@ const DropZone = <T extends BlockType>({
   handleDraggingQuestionAction,
   index,
 }: DropZonePropsTypes<T>): JSX.Element => {
-  const translations = persianTranslations;
+  const translations = englishTranslations;
   const [{ isOverCurrent }, drop] = useDrop(
     () => ({
       accept: acceptType,
