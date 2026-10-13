@@ -70,12 +70,12 @@ const findQuestionLocation = (
     }
   }
 
-  return { index: -1 };
+  return { index: -1, indexInGroup: -1 };
 };
 
 export const findQuestion = (
   questions: QuestionDetailsType[],
-  id: string
+  id: string | undefined
 ): QuestionLocationType =>
   findQuestionLocation(questions, (question) => question.id === id);
 
@@ -235,23 +235,25 @@ const handleDraggingQuestion = (
   dragAction: HandleDraggingQuestionActionInputTypes,
   previewId?: string
 ): QuestionDetailsType[] => {
-  const { id, questionType, action } = dragAction;
-  let { atIndex, atIndexInGroup } = dragAction;
-
-  if (action === DRAG_ACTIONS.deletePreViewQuestion) {
+  if (dragAction.action === DRAG_ACTIONS.deletePreViewQuestion) {
     return removePreviewQuestion(questions);
   }
 
-  if (action === DRAG_ACTIONS.afterPreViewAdd) {
+  if (dragAction.action === DRAG_ACTIONS.afterPreViewAdd) {
+    if (!previewId) {
+      return questions;
+    }
+
     return confirmPreviewQuestion(
       questions,
-      atIndex,
-      atIndexInGroup,
+      dragAction.atIndex,
+      dragAction.atIndexInGroup,
       previewId
     );
   }
 
-  if (action === DRAG_ACTIONS.addNewQuestionPreview) {
+  if (dragAction.action === DRAG_ACTIONS.addNewQuestionPreview) {
+    const { questionType, atIndex, atIndexInGroup } = dragAction;
     const previewQuestion = findPreviewQuestion(questions);
 
     if (previewQuestion.index === -1) {
@@ -266,24 +268,33 @@ const handleDraggingQuestion = (
     return moveQuestion(questions, previewQuestion, atIndex, atIndexInGroup);
   }
 
-  const question = findQuestion(questions, id);
+  const question = findQuestion(questions, dragAction.id);
 
-  if (action === DRAG_ACTIONS.addToEndOfGroupQuestion) {
-    const groupQuestion = questions[atIndex];
+  if (dragAction.action === DRAG_ACTIONS.addToEndOfGroupQuestion) {
+    const groupQuestion = questions[dragAction.atIndex];
 
     if (groupQuestion.questionType !== GROUP_QUESTION) {
       return questions;
     }
 
-    atIndexInGroup = groupQuestion.subQuestions.length;
+    return moveQuestion(
+      questions,
+      question,
+      dragAction.atIndex,
+      groupQuestion.subQuestions.length
+    );
   }
 
-  if (action === DRAG_ACTIONS.addToEndOfQuestions) {
-    atIndex = questions.length;
-    atIndexInGroup = -1;
+  if (dragAction.action === DRAG_ACTIONS.addToEndOfQuestions) {
+    return moveQuestion(questions, question, questions.length, -1);
   }
 
-  return moveQuestion(questions, question, atIndex, atIndexInGroup);
+  return moveQuestion(
+    questions,
+    question,
+    dragAction.atIndex,
+    dragAction.atIndexInGroup
+  );
 };
 
 export const questionsReducer = (

@@ -44,8 +44,10 @@ const BuildPage = (): JSX.Element => {
     questionsReducer,
     []
   );
-  const [welcomePage, setWelcomePage] = useState<PageDetailsType>(null);
-  const [thankYouPage, setThankYouPage] = useState<PageDetailsType>(null);
+  const [welcomePage, setWelcomePage] = useState<PageDetailsType | null>(null);
+  const [thankYouPage, setThankYouPage] = useState<PageDetailsType | null>(
+    null
+  );
   const translations = englishTranslations;
   const MyPreview = () => {
     const preview = usePreview<DragItemType>();
@@ -69,8 +71,12 @@ const BuildPage = (): JSX.Element => {
 
   const addSubQuestionToGroupQuestion = (
     subQuestionType: NormalQuestionType,
-    groupQuestionId: string
+    groupQuestionId: string | undefined
   ): void => {
+    if (!groupQuestionId) {
+      return;
+    }
+
     dispatchQuestions({
       type: "addSubQuestion",
       groupQuestionId,
@@ -87,7 +93,7 @@ const BuildPage = (): JSX.Element => {
   };
 
   const findQuestion = useCallback(
-    (id: string) => findQuestionInQuestions(questionsDetails, id),
+    (id: string | undefined) => findQuestionInQuestions(questionsDetails, id),
     [questionsDetails]
   );
 

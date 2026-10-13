@@ -12,8 +12,6 @@ export type QuestionType = NormalQuestionType | "group";
 export type PageType = "welcomePage" | "thankYouPage";
 export type BlockType = QuestionType | PageType;
 export type DropZoneType = PageType | "question" | "groupQuestion";
-export type DragActionType = typeof DRAG_ACTIONS[keyof typeof DRAG_ACTIONS];
-
 export type BaseQuestionDetailsType = {
   id?: string;
 };
@@ -38,17 +36,35 @@ export type PageDetailsType = {
 
 export type QuestionLocationType = {
   index: number;
-  indexInGroup?: number;
+  indexInGroup: number;
   question?: QuestionDetailsType;
 };
 
-export type HandleDraggingQuestionActionInputTypes = {
-  id?: string;
-  questionType?: QuestionType;
-  atIndex?: number;
-  atIndexInGroup?: number;
-  action: DragActionType;
-};
+export type HandleDraggingQuestionActionInputTypes =
+  | { action: typeof DRAG_ACTIONS.deletePreViewQuestion }
+  | {
+      action: typeof DRAG_ACTIONS.afterPreViewAdd;
+      atIndex: number;
+      atIndexInGroup: number;
+    }
+  | {
+      action: typeof DRAG_ACTIONS.addNewQuestionPreview;
+      questionType: QuestionType;
+      atIndex: number;
+      atIndexInGroup: number;
+    }
+  | {
+      action: typeof DRAG_ACTIONS.addToEndOfGroupQuestion;
+      id: string;
+      atIndex: number;
+    }
+  | { action: typeof DRAG_ACTIONS.addToEndOfQuestions; id: string }
+  | {
+      action: typeof DRAG_ACTIONS.reOrder;
+      id: string;
+      atIndex: number;
+      atIndexInGroup: number;
+    };
 
 export type HandleDraggingQuestionActionType = (
   dragAction: HandleDraggingQuestionActionInputTypes
@@ -65,7 +81,7 @@ export type RenderQuestionPropsTypes = {
   question: QuestionDetailsType;
   isSubQuestion: boolean;
   handleDraggingQuestionAction: HandleDraggingQuestionActionType;
-  findQuestion: (id: string) => QuestionLocationType;
+  findQuestion: (id: string | undefined) => QuestionLocationType;
 };
 
 export type SidebarItemPropsTypes = {

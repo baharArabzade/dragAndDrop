@@ -33,9 +33,8 @@ const DropZone = <T extends BlockType>({
           return;
         }
 
-        const isNewItem = !item.id; // items dragged from the sidebar do not have an id yet
-
-        if (isNewItem) {
+        // items dragged from the sidebar do not have an id yet
+        if (!item.id) {
           addItemFunction(item.questionType);
           handleDraggingQuestionAction?.({
             action: DRAG_ACTIONS.deletePreViewQuestion,
@@ -43,7 +42,7 @@ const DropZone = <T extends BlockType>({
           return;
         }
 
-        if (dropZoneType === GROUP_QUESTION_DROP_ZONE) {
+        if (dropZoneType === GROUP_QUESTION_DROP_ZONE && index !== undefined) {
           handleDraggingQuestionAction?.({
             id: item.id,
             atIndex: index,

@@ -32,7 +32,7 @@ const RenderQuestion = ({
     id: string;
     originalIndex: number;
     originalIndexInGroup: number;
-  }>(null);
+  } | null>(null);
   const [{ isDragging }, drag] = useDrag(
     () => ({
       type: questionType,
@@ -42,18 +42,16 @@ const RenderQuestion = ({
         inValidDrop: monitor.getDropResult(),
       }),
       end: (item, monitor) => {
-        const { id: droppedId, originalIndex, originalIndexInGroup } = item;
-        const didDrop = monitor.didDrop();
-        if (!didDrop) {
-          if (item.id) {
-            setRevertActionData({
-              id: droppedId,
-              originalIndex,
-              originalIndexInGroup,
-            });
-            setInvalidDrop(true);
-          }
+        if (monitor.didDrop() || !item.id) {
+          return;
         }
+
+        setRevertActionData({
+          id: item.id,
+          originalIndex: item.originalIndex,
+          originalIndexInGroup: item.originalIndexInGroup,
+        });
+        setInvalidDrop(true);
       },
     }),
     [
@@ -65,7 +63,7 @@ const RenderQuestion = ({
     ]
   );
   useEffect(() => {
-    if (inValidDrop) {
+    if (inValidDrop && revertActionData) {
       handleDraggingQuestionAction({
         id: revertActionData.id,
         atIndex: revertActionData.originalIndex,
@@ -87,11 +85,10 @@ const RenderQuestion = ({
       },
       accept: isSubQuestion ? NORMAL_QUESTION_TYPES : QUESTION_TYPES,
       hover(item: DragItemType<QuestionType>) {
-        const isNewQuestion = !item.id;
-        const overIndex = findQuestion(id).index;
-        const overIndexInGroup = findQuestion(id).indexInGroup;
+        const { index: overIndex, indexInGroup: overIndexInGroup } =
+          findQuestion(id);
 
-        if (isNewQuestion) {
+        if (!item.id) {
           if (question.id)
             handleDraggingQuestionAction({
               questionType: item.questionType,
@@ -101,10 +98,9 @@ const RenderQuestion = ({
             });
           return;
         }
-        const draggedId = item.id;
-        if (draggedId !== id) {
+        if (item.id !== id) {
           handleDraggingQuestionAction({
-            id: draggedId,
+            id: item.id,
             atIndex: overIndex,
             atIndexInGroup: overIndexInGroup,
             action: DRAG_ACTIONS.reOrder,
