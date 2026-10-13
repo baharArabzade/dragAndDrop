@@ -6,11 +6,7 @@ import { DragItemType, QuestionType, QuestionPropsTypes } from "types/question";
 // translations
 import { translations as englishTranslations } from "translations/english";
 // constants
-import {
-  DRAG_ACTIONS,
-  NORMAL_QUESTION_TYPES,
-  QUESTION_TYPES,
-} from "constants/formBuilder";
+import { NORMAL_QUESTION_TYPES, QUESTION_TYPES } from "constants/formBuilder";
 
 const Question = ({
   question,
@@ -38,7 +34,7 @@ const Question = ({
           id: item.id,
           atIndex: item.originalIndex,
           atIndexInGroup: item.originalIndexInGroup,
-          action: DRAG_ACTIONS.moveQuestion,
+          action: "moveQuestion",
         });
       },
     }),
@@ -58,7 +54,7 @@ const Question = ({
         }
 
         handleDraggingQuestionAction({
-          action: DRAG_ACTIONS.confirmPreview,
+          action: "confirmPreview",
         });
       },
       accept: isSubQuestion ? NORMAL_QUESTION_TYPES : QUESTION_TYPES,
@@ -75,7 +71,7 @@ const Question = ({
             questionType: item.questionType,
             atIndex: overIndex,
             atIndexInGroup: overIndexInGroup,
-            action: DRAG_ACTIONS.addPreview,
+            action: "addPreview",
           });
           return;
         }
@@ -88,7 +84,7 @@ const Question = ({
           id: item.id,
           atIndex: overIndex,
           atIndexInGroup: overIndexInGroup,
-          action: DRAG_ACTIONS.moveQuestion,
+          action: "moveQuestion",
         });
       },
     }),

@@ -1,6 +1,6 @@
 import update from "immutability-helper";
 // constants
-import { DRAG_ACTIONS, GROUP_QUESTION } from "constants/formBuilder";
+import { GROUP_QUESTION } from "constants/formBuilder";
 // types
 import {
   BaseQuestionDetailsType,
@@ -239,11 +239,11 @@ const handleDraggingQuestion = (
   dragAction: DragActionType,
   previewId?: string
 ): QuestionDetailsType[] => {
-  if (dragAction.action === DRAG_ACTIONS.removePreview) {
+  if (dragAction.action === "removePreview") {
     return removePreviewQuestion(questions);
   }
 
-  if (dragAction.action === DRAG_ACTIONS.confirmPreview) {
+  if (dragAction.action === "confirmPreview") {
     if (!previewId) {
       return questions;
     }
@@ -251,7 +251,7 @@ const handleDraggingQuestion = (
     return confirmPreviewQuestion(questions, previewId);
   }
 
-  if (dragAction.action === DRAG_ACTIONS.addPreview) {
+  if (dragAction.action === "addPreview") {
     const { questionType, atIndex, atIndexInGroup } = dragAction;
     const previewQuestion = findPreviewQuestion(questions);
 
@@ -269,7 +269,7 @@ const handleDraggingQuestion = (
 
   const question = findQuestion(questions, dragAction.id);
 
-  if (dragAction.action === DRAG_ACTIONS.moveToEndOfGroup) {
+  if (dragAction.action === "moveToEndOfGroup") {
     const groupQuestion = questions[dragAction.atIndex];
 
     if (groupQuestion.questionType !== GROUP_QUESTION) {
@@ -284,7 +284,7 @@ const handleDraggingQuestion = (
     );
   }
 
-  if (dragAction.action === DRAG_ACTIONS.moveToEnd) {
+  if (dragAction.action === "moveToEnd") {
     return moveQuestion(questions, question, questions.length, -1);
   }
 

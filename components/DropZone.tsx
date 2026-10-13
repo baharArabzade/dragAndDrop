@@ -1,7 +1,6 @@
 import { useDrop } from "react-dnd";
 // constants
 import {
-  DRAG_ACTIONS,
   GROUP_QUESTION_DROP_ZONE,
   QUESTION_DROP_ZONE,
 } from "constants/formBuilder";
@@ -33,7 +32,7 @@ const DropZone = <T extends BlockType>({
         if (!item.id) {
           onAddItem(item.questionType);
           handleDraggingQuestionAction?.({
-            action: DRAG_ACTIONS.removePreview,
+            action: "removePreview",
           });
           return;
         }
@@ -42,7 +41,7 @@ const DropZone = <T extends BlockType>({
           handleDraggingQuestionAction?.({
             id: item.id,
             atIndex: index,
-            action: DRAG_ACTIONS.moveToEndOfGroup,
+            action: "moveToEndOfGroup",
           });
           return;
         }
@@ -50,7 +49,7 @@ const DropZone = <T extends BlockType>({
         if (dropZoneType === QUESTION_DROP_ZONE) {
           handleDraggingQuestionAction?.({
             id: item.id,
-            action: DRAG_ACTIONS.moveToEnd,
+            action: "moveToEnd",
           });
         }
       },

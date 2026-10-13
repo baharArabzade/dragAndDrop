@@ -4,7 +4,6 @@ import { DndProvider } from "react-dnd";
 import { v4 as uuid } from "uuid";
 // constants
 import {
-  DRAG_ACTIONS,
   GROUP_QUESTION,
   GROUP_QUESTION_DROP_ZONE,
   NORMAL_QUESTION_TYPES,
@@ -83,10 +82,7 @@ const FormBuilderPage = (): JSX.Element => {
       dispatchQuestions({
         type: "handleDraggingQuestion",
         dragAction,
-        previewId:
-          dragAction.action === DRAG_ACTIONS.confirmPreview
-            ? uuid()
-            : undefined,
+        previewId: dragAction.action === "confirmPreview" ? uuid() : undefined,
       });
     },
     []

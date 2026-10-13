@@ -2,7 +2,6 @@ import { useDrag } from "react-dnd";
 // constants
 import {
   BLOCK_ICONS,
-  DRAG_ACTIONS,
   THANK_YOU_PAGE,
   WELCOME_PAGE,
 } from "constants/formBuilder";
@@ -28,7 +27,7 @@ const SidebarItem = ({
         }
 
         handleDraggingQuestionAction({
-          action: DRAG_ACTIONS.removePreview,
+          action: "removePreview",
         });
       },
       collect: (monitor) => ({

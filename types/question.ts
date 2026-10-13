@@ -1,6 +1,4 @@
 import { ReactNode } from "react";
-// constants
-import { DRAG_ACTIONS } from "constants/formBuilder";
 
 export type NormalQuestionType =
   | "number"
@@ -41,22 +39,22 @@ export type QuestionLocationType = {
 };
 
 export type DragActionType =
-  | { action: typeof DRAG_ACTIONS.removePreview }
-  | { action: typeof DRAG_ACTIONS.confirmPreview }
+  | { action: "removePreview" }
+  | { action: "confirmPreview" }
   | {
-      action: typeof DRAG_ACTIONS.addPreview;
+      action: "addPreview";
       questionType: QuestionType;
       atIndex: number;
       atIndexInGroup: number;
     }
   | {
-      action: typeof DRAG_ACTIONS.moveToEndOfGroup;
+      action: "moveToEndOfGroup";
       id: string;
       atIndex: number;
     }
-  | { action: typeof DRAG_ACTIONS.moveToEnd; id: string }
+  | { action: "moveToEnd"; id: string }
   | {
-      action: typeof DRAG_ACTIONS.moveQuestion;
+      action: "moveQuestion";
       id: string;
       atIndex: number;
       atIndexInGroup: number;

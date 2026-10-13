@@ -41,12 +41,3 @@ export const BLOCK_ICONS: Record<BlockType, string> = {
   email: "@",
   thankYouPage: "✓",
 };
-
-export const DRAG_ACTIONS = {
-  removePreview: "removePreview",
-  confirmPreview: "confirmPreview",
-  addPreview: "addPreview",
-  moveToEndOfGroup: "moveToEndOfGroup",
-  moveToEnd: "moveToEnd",
-  moveQuestion: "moveQuestion",
-} as const;
