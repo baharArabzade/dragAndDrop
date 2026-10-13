@@ -91,7 +91,7 @@
 }
 
 .place_holder,
-.place_holder_isOver {
+.place_holder_over {
   text-align: center;
   border: 1px dashed #b7c3d6;
   border-radius: 12px;
@@ -107,7 +107,7 @@
   justify-content: center;
 }
 
-.place_holder_isOver {
+.place_holder_over {
   border-color: $primary;
   background: $primary-soft;
   color: $primary;

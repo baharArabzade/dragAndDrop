@@ -4,12 +4,12 @@ import { DRAG_ACTIONS, GROUP_QUESTION } from "components/constants";
 // types
 import {
   BaseQuestionDetailsType,
-  HandleDraggingQuestionActionInputTypes,
+  DragActionType,
   NormalQuestionDetailsType,
   QuestionDetailsType,
   QuestionLocationType,
   QuestionType,
-} from "types/componentType";
+} from "types/question";
 
 export type QuestionsReducerAction =
   | {
@@ -23,7 +23,7 @@ export type QuestionsReducerAction =
     }
   | {
       type: "handleDraggingQuestion";
-      dragAction: HandleDraggingQuestionActionInputTypes;
+      dragAction: DragActionType;
       previewId?: string;
     };
 
@@ -232,14 +232,14 @@ const moveQuestion = (
 
 const handleDraggingQuestion = (
   questions: QuestionDetailsType[],
-  dragAction: HandleDraggingQuestionActionInputTypes,
+  dragAction: DragActionType,
   previewId?: string
 ): QuestionDetailsType[] => {
-  if (dragAction.action === DRAG_ACTIONS.deletePreViewQuestion) {
+  if (dragAction.action === DRAG_ACTIONS.removePreview) {
     return removePreviewQuestion(questions);
   }
 
-  if (dragAction.action === DRAG_ACTIONS.afterPreViewAdd) {
+  if (dragAction.action === DRAG_ACTIONS.confirmPreview) {
     if (!previewId) {
       return questions;
     }
@@ -252,7 +252,7 @@ const handleDraggingQuestion = (
     );
   }
 
-  if (dragAction.action === DRAG_ACTIONS.addNewQuestionPreview) {
+  if (dragAction.action === DRAG_ACTIONS.addPreview) {
     const { questionType, atIndex, atIndexInGroup } = dragAction;
     const previewQuestion = findPreviewQuestion(questions);
 
@@ -270,7 +270,7 @@ const handleDraggingQuestion = (
 
   const question = findQuestion(questions, dragAction.id);
 
-  if (dragAction.action === DRAG_ACTIONS.addToEndOfGroupQuestion) {
+  if (dragAction.action === DRAG_ACTIONS.moveToEndOfGroup) {
     const groupQuestion = questions[dragAction.atIndex];
 
     if (groupQuestion.questionType !== GROUP_QUESTION) {
@@ -285,7 +285,7 @@ const handleDraggingQuestion = (
     );
   }
 
-  if (dragAction.action === DRAG_ACTIONS.addToEndOfQuestions) {
+  if (dragAction.action === DRAG_ACTIONS.moveToEnd) {
     return moveQuestion(questions, question, questions.length, -1);
   }
 

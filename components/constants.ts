@@ -1,9 +1,5 @@
 // types
-import {
-  BlockType,
-  NormalQuestionType,
-  QuestionType,
-} from "types/componentType";
+import { BlockType, NormalQuestionType, QuestionType } from "types/question";
 
 export const WELCOME_PAGE = "welcomePage";
 export const THANK_YOU_PAGE = "thankYouPage";
@@ -47,10 +43,10 @@ export const BLOCK_ICONS: Record<BlockType, string> = {
 };
 
 export const DRAG_ACTIONS = {
-  deletePreViewQuestion: "deletePreViewQuestion",
-  afterPreViewAdd: "afterPreViewAdd",
-  addNewQuestionPreview: "addNewQuestionPreview",
-  addToEndOfGroupQuestion: "addToEndOfGroupQuestion",
-  addToEndOfQuestions: "addToEndOfQuestions",
-  reOrder: "reOrder",
+  removePreview: "removePreview",
+  confirmPreview: "confirmPreview",
+  addPreview: "addPreview",
+  moveToEndOfGroup: "moveToEndOfGroup",
+  moveToEnd: "moveToEnd",
+  moveQuestion: "moveQuestion",
 } as const;

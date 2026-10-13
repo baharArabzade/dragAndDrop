@@ -2,11 +2,7 @@ import { useDrag, useDrop } from "react-dnd";
 // style
 import classes from "styles/components/question.module.scss";
 // types
-import {
-  DragItemType,
-  QuestionType,
-  RenderQuestionPropsTypes,
-} from "types/componentType";
+import { DragItemType, QuestionType, QuestionPropsTypes } from "types/question";
 // translations
 import { translations as englishTranslations } from "translations/english";
 // constants
@@ -16,12 +12,12 @@ import {
   QUESTION_TYPES,
 } from "components/constants";
 
-const RenderQuestion = ({
+const Question = ({
   question,
   handleDraggingQuestionAction,
   findQuestion,
   isSubQuestion,
-}: RenderQuestionPropsTypes): JSX.Element => {
+}: QuestionPropsTypes): JSX.Element => {
   const translations = englishTranslations;
   const { id, questionType } = question;
   const { index: originalIndex, indexInGroup: originalIndexInGroup } =
@@ -42,7 +38,7 @@ const RenderQuestion = ({
           id: item.id,
           atIndex: item.originalIndex,
           atIndexInGroup: item.originalIndexInGroup,
-          action: DRAG_ACTIONS.reOrder,
+          action: DRAG_ACTIONS.moveQuestion,
         });
       },
     }),
@@ -64,7 +60,7 @@ const RenderQuestion = ({
         handleDraggingQuestionAction({
           atIndex: originalIndex,
           atIndexInGroup: originalIndexInGroup,
-          action: DRAG_ACTIONS.afterPreViewAdd,
+          action: DRAG_ACTIONS.confirmPreview,
         });
       },
       accept: isSubQuestion ? NORMAL_QUESTION_TYPES : QUESTION_TYPES,
@@ -81,7 +77,7 @@ const RenderQuestion = ({
             questionType: item.questionType,
             atIndex: overIndex,
             atIndexInGroup: overIndexInGroup,
-            action: DRAG_ACTIONS.addNewQuestionPreview,
+            action: DRAG_ACTIONS.addPreview,
           });
           return;
         }
@@ -94,7 +90,7 @@ const RenderQuestion = ({
           id: item.id,
           atIndex: overIndex,
           atIndexInGroup: overIndexInGroup,
-          action: DRAG_ACTIONS.reOrder,
+          action: DRAG_ACTIONS.moveQuestion,
         });
       },
     }),
@@ -141,4 +137,4 @@ const RenderQuestion = ({
   );
 };
 
-export default RenderQuestion;
+export default Question;

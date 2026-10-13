@@ -8,16 +8,12 @@ import {
 // style
 import classes from "styles/index.module.scss";
 // types
-import {
-  BlockType,
-  DragItemType,
-  DropZonePropsTypes,
-} from "types/componentType";
+import { BlockType, DragItemType, DropZonePropsTypes } from "types/question";
 // translations
 import { translations as englishTranslations } from "translations/english";
 
 const DropZone = <T extends BlockType>({
-  addItemFunction,
+  onAddItem,
   children,
   acceptType,
   dropZoneType,
@@ -35,9 +31,9 @@ const DropZone = <T extends BlockType>({
 
         // items dragged from the sidebar do not have an id yet
         if (!item.id) {
-          addItemFunction(item.questionType);
+          onAddItem(item.questionType);
           handleDraggingQuestionAction?.({
-            action: DRAG_ACTIONS.deletePreViewQuestion,
+            action: DRAG_ACTIONS.removePreview,
           });
           return;
         }
@@ -46,7 +42,7 @@ const DropZone = <T extends BlockType>({
           handleDraggingQuestionAction?.({
             id: item.id,
             atIndex: index,
-            action: DRAG_ACTIONS.addToEndOfGroupQuestion,
+            action: DRAG_ACTIONS.moveToEndOfGroup,
           });
           return;
         }
@@ -54,7 +50,7 @@ const DropZone = <T extends BlockType>({
         if (dropZoneType === QUESTION_DROP_ZONE) {
           handleDraggingQuestionAction?.({
             id: item.id,
-            action: DRAG_ACTIONS.addToEndOfQuestions,
+            action: DRAG_ACTIONS.moveToEnd,
           });
         }
       },
@@ -62,13 +58,7 @@ const DropZone = <T extends BlockType>({
         isOverCurrent: monitor.isOver({ shallow: true }),
       }),
     }),
-    [
-      acceptType,
-      addItemFunction,
-      dropZoneType,
-      handleDraggingQuestionAction,
-      index,
-    ]
+    [acceptType, onAddItem, dropZoneType, handleDraggingQuestionAction, index]
   );
 
   return (
@@ -83,7 +73,7 @@ const DropZone = <T extends BlockType>({
         {children}
         <div
           className={
-            isOverCurrent ? classes.place_holder_isOver : classes.place_holder
+            isOverCurrent ? classes.place_holder_over : classes.place_holder
           }
         >
           {translations.placeHolder[dropZoneType].titleText}

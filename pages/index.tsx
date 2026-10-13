@@ -15,7 +15,7 @@ import {
   WELCOME_PAGE,
 } from "components/constants";
 // components
-import RenderQuestion from "components/Question";
+import Question from "components/Question";
 import DropZone from "components/DropZone";
 import SidebarItem from "components/SidebarItem";
 // style
@@ -28,18 +28,15 @@ import {
 } from "reducers/questionsReducer";
 // types
 import {
-  HandleDraggingQuestionActionInputTypes,
+  DragActionType,
   NormalQuestionType,
   PageDetailsType,
   QuestionType,
-} from "types/componentType";
+} from "types/question";
 import { translations as englishTranslations } from "translations/english";
 
-const BuildPage = (): JSX.Element => {
-  const [questionsDetails, dispatchQuestions] = useReducer(
-    questionsReducer,
-    []
-  );
+const FormBuilderPage = (): JSX.Element => {
+  const [questions, dispatchQuestions] = useReducer(questionsReducer, []);
   const [welcomePage, setWelcomePage] = useState<PageDetailsType | null>(null);
   const [thankYouPage, setThankYouPage] = useState<PageDetailsType | null>(
     null
@@ -77,17 +74,17 @@ const BuildPage = (): JSX.Element => {
   };
 
   const findQuestion = useCallback(
-    (id: string | undefined) => findQuestionInQuestions(questionsDetails, id),
-    [questionsDetails]
+    (id: string | undefined) => findQuestionInQuestions(questions, id),
+    [questions]
   );
 
   const handleDraggingQuestionAction = useCallback(
-    (dragAction: HandleDraggingQuestionActionInputTypes): void => {
+    (dragAction: DragActionType): void => {
       dispatchQuestions({
         type: "handleDraggingQuestion",
         dragAction,
         previewId:
-          dragAction.action === DRAG_ACTIONS.afterPreViewAdd
+          dragAction.action === DRAG_ACTIONS.confirmPreview
             ? uuid()
             : undefined,
       });
@@ -127,12 +124,12 @@ const BuildPage = (): JSX.Element => {
               <DropZone
                 acceptType={WELCOME_PAGE}
                 dropZoneType={WELCOME_PAGE}
-                addItemFunction={addWelcomePage}
+                onAddItem={addWelcomePage}
               />
             )}
-            {questionsDetails.map((question, index) => (
+            {questions.map((question, index) => (
               <div className={classes.question_block} key={question.id}>
-                <RenderQuestion
+                <Question
                   question={question}
                   isSubQuestion={false}
                   handleDraggingQuestionAction={handleDraggingQuestionAction}
@@ -144,7 +141,7 @@ const BuildPage = (): JSX.Element => {
                     acceptType={NORMAL_QUESTION_TYPES}
                     dropZoneType={GROUP_QUESTION_DROP_ZONE}
                     handleDraggingQuestionAction={handleDraggingQuestionAction}
-                    addItemFunction={(subQuestionType) =>
+                    onAddItem={(subQuestionType) =>
                       addSubQuestionToGroupQuestion(
                         subQuestionType,
                         question.id
@@ -152,7 +149,7 @@ const BuildPage = (): JSX.Element => {
                     }
                   >
                     {question.subQuestions.map((subQuestion) => (
-                      <RenderQuestion
+                      <Question
                         key={subQuestion.id}
                         question={subQuestion}
                         isSubQuestion={true}
@@ -167,7 +164,7 @@ const BuildPage = (): JSX.Element => {
               </div>
             ))}
             <DropZone
-              addItemFunction={addQuestion}
+              onAddItem={addQuestion}
               acceptType={QUESTION_TYPES}
               dropZoneType={QUESTION_DROP_ZONE}
               handleDraggingQuestionAction={handleDraggingQuestionAction}
@@ -180,7 +177,7 @@ const BuildPage = (): JSX.Element => {
               <DropZone
                 acceptType={THANK_YOU_PAGE}
                 dropZoneType={THANK_YOU_PAGE}
-                addItemFunction={addThankYouPage}
+                onAddItem={addThankYouPage}
               />
             )}
           </div>
@@ -190,4 +187,4 @@ const BuildPage = (): JSX.Element => {
   );
 };
 
-export default BuildPage;
+export default FormBuilderPage;

@@ -9,7 +9,7 @@ import {
 // style
 import classes from "styles/components/sidebar.module.scss";
 // types
-import { SidebarItemPropsTypes } from "types/componentType";
+import { SidebarItemPropsTypes } from "types/question";
 // translations
 import { translations as englishTranslations } from "translations/english";
 
@@ -28,7 +28,7 @@ const SidebarItem = ({
         }
 
         handleDraggingQuestionAction({
-          action: DRAG_ACTIONS.deletePreViewQuestion,
+          action: DRAG_ACTIONS.removePreview,
         });
       },
       collect: (monitor) => ({
@@ -43,7 +43,7 @@ const SidebarItem = ({
   const itemClassName = [
     classes.default_question,
     isPage ? classes.full_width : "",
-    isDragging ? classes.isDragging : "",
+    isDragging ? classes.dragging : "",
   ]
     .filter(Boolean)
     .join(" ");

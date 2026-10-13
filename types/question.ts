@@ -40,34 +40,34 @@ export type QuestionLocationType = {
   question?: QuestionDetailsType;
 };
 
-export type HandleDraggingQuestionActionInputTypes =
-  | { action: typeof DRAG_ACTIONS.deletePreViewQuestion }
+export type DragActionType =
+  | { action: typeof DRAG_ACTIONS.removePreview }
   | {
-      action: typeof DRAG_ACTIONS.afterPreViewAdd;
+      action: typeof DRAG_ACTIONS.confirmPreview;
       atIndex: number;
       atIndexInGroup: number;
     }
   | {
-      action: typeof DRAG_ACTIONS.addNewQuestionPreview;
+      action: typeof DRAG_ACTIONS.addPreview;
       questionType: QuestionType;
       atIndex: number;
       atIndexInGroup: number;
     }
   | {
-      action: typeof DRAG_ACTIONS.addToEndOfGroupQuestion;
+      action: typeof DRAG_ACTIONS.moveToEndOfGroup;
       id: string;
       atIndex: number;
     }
-  | { action: typeof DRAG_ACTIONS.addToEndOfQuestions; id: string }
+  | { action: typeof DRAG_ACTIONS.moveToEnd; id: string }
   | {
-      action: typeof DRAG_ACTIONS.reOrder;
+      action: typeof DRAG_ACTIONS.moveQuestion;
       id: string;
       atIndex: number;
       atIndexInGroup: number;
     };
 
 export type HandleDraggingQuestionActionType = (
-  dragAction: HandleDraggingQuestionActionInputTypes
+  dragAction: DragActionType
 ) => void;
 
 export type DragItemType<T extends BlockType = BlockType> = {
@@ -77,7 +77,7 @@ export type DragItemType<T extends BlockType = BlockType> = {
   questionType: T;
 };
 
-export type RenderQuestionPropsTypes = {
+export type QuestionPropsTypes = {
   question: QuestionDetailsType;
   isSubQuestion: boolean;
   handleDraggingQuestionAction: HandleDraggingQuestionActionType;
@@ -92,7 +92,7 @@ export type SidebarItemPropsTypes = {
 export type DropZonePropsTypes<T extends BlockType> = {
   acceptType: T | T[];
   dropZoneType: DropZoneType;
-  addItemFunction: (questionType: T) => void;
+  onAddItem: (questionType: T) => void;
   handleDraggingQuestionAction?: HandleDraggingQuestionActionType;
   index?: number;
   children?: ReactNode;
