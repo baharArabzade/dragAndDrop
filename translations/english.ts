@@ -7,46 +7,36 @@ export const translations = {
   },
   placeHolder: {
     welcomePage: {
-      titleText: "Welcome Page Place holder",
+      titleText: "Drag the welcome page here from the sidebar",
     },
-    appreciationPage: {
-      titleText: "Appreciation page place holder",
+    thankYouPage: {
+      titleText: "Drag the thank you page here from the sidebar",
     },
     question: {
-      titleText: "Question placeholder",
+      titleText: "Drag a question type here from the sidebar",
     },
     groupQuestion: {
-      titleText: "groupQuestion placeholder",
+      titleText: "Sub-question",
     },
-  },
-  welcomePage: {
-    titleText: "Welcome Page",
-  },
-  appreciationPage: {
-    titleText: "Appreciation page",
   },
   questions: {
-    multipleChoiceQuestion: {
-      titleText: "Multiple choice question",
+    welcomePage: {
+      titleText: "Welcome page",
     },
-
-    longAnswer: {
-      titleText: "Long answer",
+    thankYouPage: {
+      titleText: "Thank you page",
     },
     number: {
       titleText: "Number",
     },
+    group: {
+      titleText: "Question group",
+    },
+    longAnswer: {
+      titleText: "Long answer",
+    },
     shortAnswer: {
       titleText: "Short answer",
-    },
-    group: {
-      titleText: "group question",
-    },
-    welcomePage: {
-      titleText: "Welcome Page",
-    },
-    appreciationPage: {
-      titleText: "Appreciation page",
     },
   },
 };
