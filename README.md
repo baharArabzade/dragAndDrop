@@ -32,7 +32,7 @@ Then open [http://localhost:3000](http://localhost:3000).
 npm run build       # Create a production build
 npm run start       # Run the production build
 npm run type-check  # Check TypeScript types
-npm run eslint      # Run ESLint
+npm run lint        # Run ESLint
 ```
 
 ## Main structure

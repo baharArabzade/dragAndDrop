@@ -1,11 +1,10 @@
-import React from "react";
 import { useDrop } from "react-dnd";
 import { v4 as uuid } from "uuid";
-//style
+// style
 import classes from "styles/index.module.scss";
-//types
+// types
 import { DragItemType, DropZonePropsTypes } from "types/componentType";
-//translations
+// translations
 import { translations as persianTranslations } from "translations/persian";
 
 const DropZone = ({

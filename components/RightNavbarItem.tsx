@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
-//style
+// style
 import classes from "styles/components/rightNavbar.module.scss";
-//types
+// types
 import { RightNavbarPropsTypes } from "types/componentType";
-//translations
+// translations
 import { translations as persianTranslations } from "translations/persian";
 
 const RightNavbarItem = ({

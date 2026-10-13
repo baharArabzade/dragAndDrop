@@ -1,11 +1,11 @@
-import React, { useCallback, useReducer, useState } from "react";
+import { useCallback, useReducer, useState } from "react";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { v4 as uuid } from "uuid";
 import { usePreview } from "react-dnd-preview";
 import { isMobile } from "react-device-detect";
-//constant
+// constants
 import {
   RIGHT_NAVBAR_ITEMS,
   QUESTION_TYPE,
@@ -19,14 +19,14 @@ import {
 import RenderQuestion from "components/Question";
 import DropZone from "components/DropZone";
 import RightNavbarItem from "components/RightNavbarItem";
-//style
+// style
 import classes from "styles/index.module.scss";
 // reducers
 import {
   findQuestion as findQuestionInQuestions,
   questionsReducer,
 } from "reducers/questionsReducer";
-//types
+// types
 import {
   AppreciationPageDetailsType,
   DragItemType,

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDrag, useDrop } from "react-dnd";
-//style
+// style
 import classes from "styles/components/question.module.scss";
 // types
 import { DragItemType, RenderQuestionPropsTypes } from "types/componentType";
-//translations
+// translations
 import { translations as persianTranslations } from "translations/persian";
-//constants
+// constants
 import { QUESTIONS_TYPES } from "components/constants";
 import { actions } from "components/constants";
 
