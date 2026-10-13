@@ -1,4 +1,10 @@
 export const translations = {
+  app: {
+    title: "Form builder",
+    subtitle: "Drag blocks onto the canvas and reorder questions",
+    sidebarTitle: "Blocks",
+    sidebarHint: "Drag an item onto the canvas",
+  },
   placeHolder: {
     welcomePage: {
       titleText: "Welcome Page Place holder",

@@ -1,4 +1,10 @@
 export const translations = {
+  app: {
+    title: "سازنده فرم",
+    subtitle: "بلوک‌ها را بکشید و ترتیب سوال‌ها را تنظیم کنید",
+    sidebarTitle: "بلوک‌ها",
+    sidebarHint: "یک مورد را به بوم بکشید",
+  },
   placeHolder: {
     welcomePage: {
       titleText: "صفحه‌ خوش‌آمد گویی را از ستون سمت راست به اینجا بکشید",

@@ -36,11 +36,11 @@ const RightNavbarItem = ({
   }, [inValidDrop]);
   return (
     <div
+      role="button"
       className={`${classes.default_question} ${
-        isDragging && classes.isDragging
+        isDragging ? classes.isDragging : ""
       }`}
       ref={drag}
-      key={questionType}
     >
       {translations.questions[questionType].titleText}
     </div>

@@ -34,7 +34,7 @@ import {
   QuestionType,
   WelcomePageDetailsType,
 } from "types/componentType";
-import { translations as persianTranslations } from "translations/english";
+import { translations as persianTranslations } from "translations/persian";
 
 const createQuestion = (questionType: string): QuestionType => ({
   id: uuid(),
@@ -60,7 +60,6 @@ const BuildPage = (): JSX.Element => {
     return (
       <div style={{ ...style, zIndex: 2 }} className={classes.question_row}>
         {translations.questions[item.questionType].titleText}
-        {item.id}
       </div>
     );
   };
@@ -116,90 +115,107 @@ const BuildPage = (): JSX.Element => {
       backend={isMobile ? TouchBackend : HTML5Backend}
       options={{ enableMouseEvents: true }}
     >
-      <div>
+      <div className={classes.app}>
         {isMobile && <MyPreview />}
-        <div className={classes.right_Navbar}>
-          {RIGHT_NAVBAR_ITEMS.map((question) => (
-            <RightNavbarItem
-              key={question.questionType}
-              questionType={question.questionType}
-              handleDraggingQuestionAction={handleDraggingQuestionAction}
-            />
-          ))}
-        </div>
-        <div className={classes.form_container}>
-          {welcomePage ? (
-            <div className={`${classes.question_row}`}>
-              {translations.questions[WELCOME_TYPE].titleText}
-            </div>
-          ) : (
-            <DropZone
-              acceptType={WELCOME_TYPE}
-              dropZoneType={WELCOME_TYPE}
-              addItemFunction={(welcomePageId) => addWelcomePage(welcomePageId)}
-            />
-          )}
-          {questionsDetails.map((question, index) => (
-            <div key={`${question.id}`}>
-              <RenderQuestion
-                question={question}
-                id={question.id}
-                isSubQuestion={false}
+        <aside className={classes.right_Navbar}>
+          <h2 className={classes.sidebar_title}>
+            {translations.app.sidebarTitle}
+          </h2>
+          <p className={classes.sidebar_hint}>{translations.app.sidebarHint}</p>
+          <div className={classes.sidebar_list}>
+            {RIGHT_NAVBAR_ITEMS.map((question) => (
+              <RightNavbarItem
+                key={question.questionType}
+                questionType={question.questionType}
                 handleDraggingQuestionAction={handleDraggingQuestionAction}
-                findQuestion={findQuestion}
               />
-              {question?.subQuestions && (
-                <DropZone
-                  index={index}
-                  acceptType={QUESTIONS_TYPES.filter(
-                    (questionType) => questionType != "group",
-                  )}
-                  dropZoneType={GROUP_QUESTION_TYPE}
-                  findQuestion={findQuestion}
-                  groupQuestionId={question.id}
+            ))}
+          </div>
+        </aside>
+        <main className={classes.form_container}>
+          <header className={classes.page_header}>
+            <h1 className={classes.page_title}>{translations.app.title}</h1>
+            <p className={classes.page_subtitle}>{translations.app.subtitle}</p>
+          </header>
+          <div className={classes.canvas}>
+            {welcomePage ? (
+              <div className={classes.page_block}>
+                {translations.questions[WELCOME_TYPE].titleText}
+              </div>
+            ) : (
+              <DropZone
+                acceptType={WELCOME_TYPE}
+                dropZoneType={WELCOME_TYPE}
+                addItemFunction={(welcomePageId) =>
+                  addWelcomePage(welcomePageId)
+                }
+              />
+            )}
+            {questionsDetails.map((question, index) => (
+              <div className={classes.question_block} key={`${question.id}`}>
+                <RenderQuestion
+                  question={question}
+                  id={question.id}
+                  isSubQuestion={false}
                   handleDraggingQuestionAction={handleDraggingQuestionAction}
-                  addItemFunction={(subQuestion, groupQuestionId) =>
-                    addSubQuestionToGroupQuestion(subQuestion, groupQuestionId)
-                  }
-                >
-                  {question.subQuestions.map((subQuestion, index) => (
-                    <RenderQuestion
-                      key={subQuestion.id}
-                      question={subQuestion}
-                      index={index}
-                      isSubQuestion={true}
-                      handleDraggingQuestionAction={
-                        handleDraggingQuestionAction
-                      }
-                      findQuestion={findQuestion}
-                      id={subQuestion.id}
-                    />
-                  ))}
-                </DropZone>
-              )}
-            </div>
-          ))}
-          <DropZone
-            addItemFunction={(questionType) => addQuestion(questionType)}
-            acceptType={QUESTIONS_TYPES}
-            dropZoneType={QUESTION_TYPE}
-            handleDraggingQuestionAction={handleDraggingQuestionAction}
-            findQuestion={findQuestion}
-          />
-          {appreciationPage ? (
-            <div className={`${classes.question_row}`}>
-              {translations.questions[APPRECIATION_TYPE].titleText}
-            </div>
-          ) : (
+                  findQuestion={findQuestion}
+                />
+                {question?.subQuestions && (
+                  <DropZone
+                    index={index}
+                    acceptType={QUESTIONS_TYPES.filter(
+                      (questionType) => questionType != "group",
+                    )}
+                    dropZoneType={GROUP_QUESTION_TYPE}
+                    findQuestion={findQuestion}
+                    groupQuestionId={question.id}
+                    handleDraggingQuestionAction={handleDraggingQuestionAction}
+                    addItemFunction={(subQuestion, groupQuestionId) =>
+                      addSubQuestionToGroupQuestion(
+                        subQuestion,
+                        groupQuestionId,
+                      )
+                    }
+                  >
+                    {question.subQuestions.map((subQuestion, index) => (
+                      <RenderQuestion
+                        key={subQuestion.id}
+                        question={subQuestion}
+                        index={index}
+                        isSubQuestion={true}
+                        handleDraggingQuestionAction={
+                          handleDraggingQuestionAction
+                        }
+                        findQuestion={findQuestion}
+                        id={subQuestion.id}
+                      />
+                    ))}
+                  </DropZone>
+                )}
+              </div>
+            ))}
             <DropZone
-              acceptType={APPRECIATION_TYPE}
-              dropZoneType={APPRECIATION_TYPE}
-              addItemFunction={(appreciationPageId) =>
-                addAppreciationPage(appreciationPageId)
-              }
+              addItemFunction={(questionType) => addQuestion(questionType)}
+              acceptType={QUESTIONS_TYPES}
+              dropZoneType={QUESTION_TYPE}
+              handleDraggingQuestionAction={handleDraggingQuestionAction}
+              findQuestion={findQuestion}
             />
-          )}
-        </div>
+            {appreciationPage ? (
+              <div className={classes.page_block}>
+                {translations.questions[APPRECIATION_TYPE].titleText}
+              </div>
+            ) : (
+              <DropZone
+                acceptType={APPRECIATION_TYPE}
+                dropZoneType={APPRECIATION_TYPE}
+                addItemFunction={(appreciationPageId) =>
+                  addAppreciationPage(appreciationPageId)
+                }
+              />
+            )}
+          </div>
+        </main>
       </div>
     </DndProvider>
   );

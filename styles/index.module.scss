@@ -1,128 +1,128 @@
 @import "variables";
 
-.dash_border {
-  border: 1px dashed $blue;
-}
-
-.solid_border {
-  border: 1px solid #ddd;
-}
-
-.holder {
-
-}
-
-.default_question {
-  z-index: 2;
-  width: 168px;
-  height: 40px;
-  margin: 16px 16px 16px 0;
-  padding: 4px 4px 4px 4px;
-  border-radius: 8px;
-  background-color: $white;
-  text-align: center;
-  cursor: move;
-  vertical-align: middle;
-}
-
-.welcome_page_row {
-  align-items: flex-start;
-  align-content: flex-start;
-  line-height: 1.5;
-  margin-top: 10px;
-  padding: 5px 0 0 0 !important;
-  border: 1px solid #aaa4a9;
-  background-color: #f0f0f0;
-  text-align: center;
-  font-size: 13px;
-  height: 30px;
-  width: 100%;
-  vertical-align: middle;
-  border-radius: 3px;
-}
-
-.welcome_page_holder {
-  background: $gray_light;
-  padding: 10px;
-  margin-bottom: 45px;
-  border-Radius: 3px;
-  flex: 0 0 150px;
-}
-
-.appreciation_page_holder {
-  background: $gray_light;
-  padding: 10px;
-  margin-bottom: 45px;
-  border-Radius: 3px;
-  flex: 0 0 150px;
-}
-
-.questions_holder {
-  background: $gray_light;
-  padding: 10px;
-  margin-bottom: 45px;
-  border-Radius: 3px;
-  flex: 0 0 150px;
+.app {
+  min-height: 100vh;
+  background: $gray-background;
 }
 
 .right_Navbar {
-  width: 400px;
-  margin: 0 0 0 0px;
-  padding: 24px;
-  background-color: $gray_background;
-  position: absolute;
+  width: 280px;
+  padding: 28px 20px;
+  background-color: $white;
+  border-left: 1px solid $border;
+  position: fixed;
   top: 0;
   right: 0;
   bottom: 0;
-  align-content: center;
+  overflow-y: auto;
 }
 
-.place_holder_isOver {
-  text-align: center;
-  border: 1px solid #4d9db5;
-  border-radius: 4px;
-  padding-top: 10px;
-  height: 30px;
-  line-height: 1.5;
+.sidebar_title {
+  margin: 0 4px 6px;
+  color: $text-1-st;
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.sidebar_hint {
+  margin: 0 4px 20px;
+  color: $text-2-nd;
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.sidebar_list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.form_container {
+  margin-right: 280px;
+  padding: 40px 48px;
+  max-width: 920px;
+}
+
+.page_header {
+  margin-bottom: 24px;
+}
+
+.page_title {
+  margin: 0 0 6px;
+  font-size: 26px;
+  font-weight: 700;
+  color: $text-1-st;
+}
+
+.page_subtitle {
+  margin: 0;
+  color: $text-2-nd;
   font-size: 14px;
-  color: #838383;
-  margin: 10px 0 20px;
+}
+
+.canvas {
+  background: $white;
+  border: 1px solid $border;
+  border-radius: 16px;
+  box-shadow: $shadow;
+  padding: 28px;
+}
+
+.page_block {
+  direction: rtl;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 64px;
+  padding: 16px 18px;
+  margin-bottom: 12px;
+  border: 1px solid $border;
+  border-radius: 12px;
+  background: $gray-98;
+  color: $text-1-st;
+  font-weight: 600;
 }
 
 .question_row {
   direction: rtl;
-  border: 1px dashed gray;
-  padding: 0.5rem 1rem;
-  margin-bottom: 0.5rem;
-  backgroundColor: white;
-  flex-direction: row;
+  border: 1px solid $border;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 10px;
+  background: $white;
 }
 
-.place_holder {
+.place_holder,
+.place_holder_isOver {
   text-align: center;
-  border: 1px dashed #4d9db5;
-  border-radius: 4px;
-  padding-top: 10px;
-  height: 30px;
-  line-height: 1.5;
-  font-size: 14px;
-  color: #838383;
-  margin: 10px 0 20px;
+  border: 1px dashed #b7c3d6;
+  border-radius: 12px;
+  min-height: 52px;
+  padding: 14px 16px;
+  line-height: 1.7;
+  font-size: 13px;
+  color: $text-2-nd;
+  margin: 8px 0 16px;
+  background: $gray-98;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.form_container {
-
-  margin-right: 448px;
-  padding: 40px;
+.place_holder_isOver {
+  border-color: $primary;
+  background: $primary-soft;
+  color: $primary;
 }
 
 .group_question_drop_zone {
-  border-right: 1px solid #4d9db5;
-  padding: 1rem;
-  margin-bottom: 2rem;
-  //margin-right: 10px;
-  //background: #9e9e9e;
+  border-right: 3px solid $primary;
+  background: $gray-98;
+  border-radius: 0 12px 12px 0;
+  padding: 12px 14px 4px;
+  margin: 0 8px 18px 0;
 }
 
-
-
+.question_block {
+  margin-bottom: 4px;
+}

@@ -117,20 +117,36 @@ const RenderQuestion = ({
     ]
   );
 
+  const questionClassName = [
+    classes.question_row,
+    isSubQuestion ? classes.sub_question : "",
+    isDragging ? classes.dragging_question : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <>
-      <div
-        className={`${classes.question_row}`}
-        ref={(node) => drag(drop(node))}
-      >
-        {!isDragging && (
-          <>
-            {translations.questions[question.questionType].titleText}
-            <p>{question.id}</p>
-          </>
-        )}
-      </div>
-    </>
+    <div
+      role="button"
+      className={questionClassName}
+      ref={(node) => drag(drop(node))}
+    >
+      {!isDragging && (
+        <>
+          <span className={classes.drag_handle} />
+          <div className={classes.question_content}>
+            <span className={classes.question_title}>
+              {translations.questions[question.questionType].titleText}
+            </span>
+            {isSubQuestion && (
+              <span className={classes.question_badge}>
+                {translations.placeHolder.groupQuestion.titleText}
+              </span>
+            )}
+          </div>
+        </>
+      )}
+    </div>
   );
 };
 
