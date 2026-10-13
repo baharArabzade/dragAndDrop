@@ -35,6 +35,17 @@ export const SIDEBAR_BLOCKS: BlockType[] = [
   THANK_YOU_PAGE,
 ];
 
+export const BLOCK_ICONS: Record<BlockType, string> = {
+  welcomePage: "→",
+  shortAnswer: "Aa",
+  longAnswer: "¶",
+  multipleChoice: "☰",
+  group: "▤",
+  number: "#",
+  email: "@",
+  thankYouPage: "✓",
+};
+
 export const DRAG_ACTIONS = {
   deletePreViewQuestion: "deletePreViewQuestion",
   afterPreViewAdd: "afterPreViewAdd",

@@ -1,26 +1,74 @@
 @import "styles/variables";
 
 .default_question {
-  width: 100%;
-  min-height: 44px;
-  padding: 10px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 8px;
   border: 1px solid $border;
-  border-radius: 12px;
+  border-radius: 10px;
   background-color: $white;
   color: $text-1-st;
-  text-align: center;
   cursor: grab;
   font-size: 14px;
   font-weight: 500;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+  box-shadow: 0 1px 2px rgba(31, 36, 48, 0.06);
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
 }
 
 .default_question:hover {
   border-color: $primary;
-  background: $primary-soft;
   box-shadow: $shadow;
+}
+
+.full_width {
+  grid-column: 1 / -1;
+  justify-content: center;
 }
 
 .isDragging {
   opacity: 0.45;
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  flex-shrink: 0;
+  border-radius: 8px;
+  color: $text-1-st;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.welcomePage,
+.thankYouPage {
+  background: #e4e6eb;
+}
+
+.shortAnswer {
+  background: #c7cbf7;
+}
+
+.longAnswer {
+  background: #cfe0fb;
+}
+
+.multipleChoice {
+  background: #f3c4e4;
+}
+
+.group {
+  background: #d6dbe5;
+}
+
+.number {
+  background: #fbb4b0;
+}
+
+.email {
+  background: #f4b6c8;
 }

@@ -1,7 +1,12 @@
 import { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
 // constants
-import { DRAG_ACTIONS } from "components/constants";
+import {
+  BLOCK_ICONS,
+  DRAG_ACTIONS,
+  THANK_YOU_PAGE,
+  WELCOME_PAGE,
+} from "components/constants";
 // style
 import classes from "styles/components/sidebar.module.scss";
 // types
@@ -38,14 +43,22 @@ const SidebarItem = ({
     });
     setInValidDrop(false);
   }, [inValidDrop]);
+
+  const isPage =
+    questionType === WELCOME_PAGE || questionType === THANK_YOU_PAGE;
+  const itemClassName = [
+    classes.default_question,
+    isPage ? classes.full_width : "",
+    isDragging ? classes.isDragging : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
   return (
-    <div
-      role="button"
-      className={`${classes.default_question} ${
-        isDragging ? classes.isDragging : ""
-      }`}
-      ref={drag}
-    >
+    <div role="button" className={itemClassName} ref={drag}>
+      <span className={`${classes.icon} ${classes[questionType]}`}>
+        {BLOCK_ICONS[questionType]}
+      </span>
       {translations.questions[questionType].titleText}
     </div>
   );

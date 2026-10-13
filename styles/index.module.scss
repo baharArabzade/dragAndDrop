@@ -6,7 +6,7 @@
 }
 
 .sidebar {
-  width: 280px;
+  width: 360px;
   padding: 28px 20px;
   background-color: $white;
   border-right: 1px solid $border;
@@ -32,13 +32,13 @@
 }
 
 .sidebar_list {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
 }
 
 .form_container {
-  margin-left: 280px;
+  margin-left: 360px;
   padding: 40px 48px;
   max-width: 920px;
 }
