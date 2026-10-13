@@ -20,7 +20,7 @@ import {
 // components
 import RenderQuestion from "components/Question";
 import DropZone from "components/DropZone";
-import RightNavbarItem from "components/RightNavbarItem";
+import SidebarItem from "components/SidebarItem";
 // style
 import classes from "styles/index.module.scss";
 // reducers
@@ -112,14 +112,14 @@ const BuildPage = (): JSX.Element => {
     >
       <div className={classes.app}>
         {isMobile && <MyPreview />}
-        <aside className={classes.right_Navbar}>
+        <aside className={classes.sidebar}>
           <h2 className={classes.sidebar_title}>
             {translations.app.sidebarTitle}
           </h2>
           <p className={classes.sidebar_hint}>{translations.app.sidebarHint}</p>
           <div className={classes.sidebar_list}>
             {SIDEBAR_BLOCKS.map((blockType) => (
-              <RightNavbarItem
+              <SidebarItem
                 key={blockType}
                 questionType={blockType}
                 handleDraggingQuestionAction={handleDraggingQuestionAction}

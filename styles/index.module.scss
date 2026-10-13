@@ -5,14 +5,14 @@
   background: $gray-background;
 }
 
-.right_Navbar {
+.sidebar {
   width: 280px;
   padding: 28px 20px;
   background-color: $white;
-  border-left: 1px solid $border;
+  border-right: 1px solid $border;
   position: fixed;
   top: 0;
-  right: 0;
+  left: 0;
   bottom: 0;
   overflow-y: auto;
 }
@@ -38,7 +38,7 @@
 }
 
 .form_container {
-  margin-right: 280px;
+  margin-left: 280px;
   padding: 40px 48px;
   max-width: 920px;
 }

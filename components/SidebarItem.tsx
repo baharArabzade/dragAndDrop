@@ -3,16 +3,16 @@ import { useDrag } from "react-dnd";
 // constants
 import { DRAG_ACTIONS } from "components/constants";
 // style
-import classes from "styles/components/rightNavbar.module.scss";
+import classes from "styles/components/sidebar.module.scss";
 // types
-import { RightNavbarPropsTypes } from "types/componentType";
+import { SidebarItemPropsTypes } from "types/componentType";
 // translations
 import { translations as persianTranslations } from "translations/persian";
 
-const RightNavbarItem = ({
+const SidebarItem = ({
   questionType,
   handleDraggingQuestionAction,
-}: RightNavbarPropsTypes): JSX.Element => {
+}: SidebarItemPropsTypes): JSX.Element => {
   const [inValidDrop, setInValidDrop] = useState<boolean>(false);
   const translations = persianTranslations;
   const [{ isDragging }, drag] = useDrag(
@@ -50,4 +50,4 @@ const RightNavbarItem = ({
     </div>
   );
 };
-export default RightNavbarItem;
+export default SidebarItem;

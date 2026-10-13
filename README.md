@@ -1,6 +1,6 @@
 # Drag-and-Drop Form Builder
 
-A small form-builder prototype built with Next.js, React, TypeScript, and React DnD. It lets users drag question types from the right sidebar into a form and reorder them.
+A small form-builder prototype built with Next.js, React, TypeScript, and React DnD. It lets users drag question types from the sidebar into a form and reorder them.
 
 ## Features
 
