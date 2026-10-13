@@ -4,9 +4,9 @@ import {
   DRAG_ACTIONS,
   GROUP_QUESTION_DROP_ZONE,
   QUESTION_DROP_ZONE,
-} from "components/constants";
+} from "constants/formBuilder";
 // style
-import classes from "styles/index.module.scss";
+import classes from "styles/components/dropZone.module.scss";
 // types
 import { BlockType, DragItemType, DropZonePropsTypes } from "types/question";
 // translations

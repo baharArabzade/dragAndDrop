@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 // constants
-import { DRAG_ACTIONS } from "components/constants";
+import { DRAG_ACTIONS } from "constants/formBuilder";
 
 export type NormalQuestionType =
   | "number"

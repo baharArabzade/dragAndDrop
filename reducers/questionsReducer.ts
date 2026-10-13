@@ -1,6 +1,6 @@
 import update from "immutability-helper";
 // constants
-import { DRAG_ACTIONS, GROUP_QUESTION } from "components/constants";
+import { DRAG_ACTIONS, GROUP_QUESTION } from "constants/formBuilder";
 // types
 import {
   BaseQuestionDetailsType,

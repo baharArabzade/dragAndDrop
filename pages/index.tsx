@@ -13,7 +13,7 @@ import {
   SIDEBAR_BLOCKS,
   THANK_YOU_PAGE,
   WELCOME_PAGE,
-} from "components/constants";
+} from "constants/formBuilder";
 // components
 import Question from "components/Question";
 import DropZone from "components/DropZone";

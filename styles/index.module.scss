@@ -90,37 +90,6 @@
   background: $white;
 }
 
-.place_holder,
-.place_holder_over {
-  text-align: center;
-  border: 1px dashed #b7c3d6;
-  border-radius: 12px;
-  min-height: 52px;
-  padding: 14px 16px;
-  line-height: 1.7;
-  font-size: 13px;
-  color: $text-2-nd;
-  margin: 8px 0 16px;
-  background: $gray-98;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.place_holder_over {
-  border-color: $primary;
-  background: $primary-soft;
-  color: $primary;
-}
-
-.group_question_drop_zone {
-  border-left: 3px solid $primary;
-  background: $gray-98;
-  border-radius: 12px 0 0 12px;
-  padding: 12px 14px 4px;
-  margin: 0 0 18px 8px;
-}
-
 .question_block {
   margin-bottom: 4px;
 }

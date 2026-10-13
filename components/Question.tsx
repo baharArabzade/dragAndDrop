@@ -10,7 +10,7 @@ import {
   DRAG_ACTIONS,
   NORMAL_QUESTION_TYPES,
   QUESTION_TYPES,
-} from "components/constants";
+} from "constants/formBuilder";
 
 const Question = ({
   question,

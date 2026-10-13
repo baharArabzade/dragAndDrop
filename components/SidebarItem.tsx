@@ -5,7 +5,7 @@ import {
   DRAG_ACTIONS,
   THANK_YOU_PAGE,
   WELCOME_PAGE,
-} from "components/constants";
+} from "constants/formBuilder";
 // style
 import classes from "styles/components/sidebar.module.scss";
 // types

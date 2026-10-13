@@ -55,6 +55,7 @@ A group question can only contain normal questions, and a group cannot be droppe
 - `pages/index.tsx` – page layout and form builder state
 - `reducers/questionsReducer.ts` – drag-and-drop and ordering logic
 - `components/` – sidebar items, questions, and drop zones
+- `constants/` – block types, drop zones, icons, and drag actions
 - `types/` – question, page, and drag action types
 - `translations/` – English and Persian interface text
 - `styles/` – global styles and SCSS modules
