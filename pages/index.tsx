@@ -2,7 +2,7 @@ import React, { useCallback, useReducer, useState } from "react";
 import { TouchBackend } from "react-dnd-touch-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
-import uuid from "uuid/v4";
+import { v4 as uuid } from "uuid";
 import { usePreview } from "react-dnd-preview";
 import { isMobile } from "react-device-detect";
 //constant
@@ -29,6 +29,7 @@ import {
 //types
 import {
   AppreciationPageDetailsType,
+  DragItemType,
   HandleDraggingQuestionActionInputTypes,
   QuestionType,
   WelcomePageDetailsType,
@@ -51,10 +52,11 @@ const BuildPage = (): JSX.Element => {
     useState<AppreciationPageDetailsType>(null);
   const translations = persianTranslations;
   const MyPreview = () => {
-    const { display, item, style } = usePreview();
-    if (!display) {
+    const preview = usePreview<DragItemType>();
+    if (!preview.display) {
       return null;
     }
+    const { item, style } = preview;
     return (
       <div style={{ ...style, zIndex: 2 }} className={classes.question_row}>
         {translations.questions[item.questionType].titleText}

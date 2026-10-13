@@ -39,7 +39,7 @@ const RenderQuestion = ({
         const { id: droppedId, originalIndex, originalIndexInGroup } = item;
         const didDrop = monitor.didDrop();
         if (!didDrop) {
-          if (!!item.id) {
+          if (item.id) {
             setRevertActionData({
               id: droppedId,
               originalIndex,
@@ -69,7 +69,7 @@ const RenderQuestion = ({
       setInvalidDrop(false);
     }
   }, [inValidDrop]);
-  const [{}, drop] = useDrop(
+  const [, drop] = useDrop(
     () => ({
       drop(item: DragItemType) {
         !item.id &&
@@ -88,7 +88,7 @@ const RenderQuestion = ({
         const overIndexInGroup = findQuestion(id).indexInGroup;
 
         if (isNewQuestion) {
-          if (!!question.id)
+          if (question.id)
             handleDraggingQuestionAction({
               questionType: item.questionType,
               atIndex: overIndex,

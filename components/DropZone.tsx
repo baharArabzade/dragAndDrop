@@ -1,5 +1,6 @@
+import React from "react";
 import { useDrop } from "react-dnd";
-import uuid from "uuid/v4";
+import { v4 as uuid } from "uuid";
 //style
 import classes from "styles/index.module.scss";
 //types
@@ -22,7 +23,7 @@ const DropZone = ({
     () => ({
       accept: acceptType,
       drop(item: DragItemType, monitor) {
-        let isNewQuestion = !item.id; // dragged Item from rightNavbar does not have id
+        const isNewQuestion = !item.id; // dragged Item from rightNavbar does not have id
         const dropOnChild = monitor.didDrop();
         if (dropOnChild) {
           return;
