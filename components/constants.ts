@@ -13,16 +13,20 @@ export const QUESTION_DROP_ZONE = "question";
 export const GROUP_QUESTION_DROP_ZONE = "groupQuestion";
 
 export const NORMAL_QUESTION_TYPES: NormalQuestionType[] = [
-  "number",
-  "longAnswer",
   "shortAnswer",
+  "longAnswer",
+  "multipleChoice",
+  "number",
+  "email",
 ];
 
 export const QUESTION_TYPES: QuestionType[] = [
-  "number",
-  GROUP_QUESTION,
-  "longAnswer",
   "shortAnswer",
+  "longAnswer",
+  "multipleChoice",
+  GROUP_QUESTION,
+  "number",
+  "email",
 ];
 
 export const SIDEBAR_BLOCKS: BlockType[] = [
