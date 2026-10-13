@@ -1,10 +1,7 @@
 import { useCallback, useReducer, useState } from "react";
-import { TouchBackend } from "react-dnd-touch-backend";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { DndProvider } from "react-dnd";
 import { v4 as uuid } from "uuid";
-import { usePreview } from "react-dnd-preview";
-import { isMobile } from "react-device-detect";
 // constants
 import {
   DRAG_ACTIONS,
@@ -31,7 +28,6 @@ import {
 } from "reducers/questionsReducer";
 // types
 import {
-  DragItemType,
   HandleDraggingQuestionActionInputTypes,
   NormalQuestionType,
   PageDetailsType,
@@ -49,18 +45,6 @@ const BuildPage = (): JSX.Element => {
     null
   );
   const translations = englishTranslations;
-  const MyPreview = () => {
-    const preview = usePreview<DragItemType>();
-    if (!preview.display) {
-      return null;
-    }
-    const { item, style } = preview;
-    return (
-      <div style={{ ...style, zIndex: 2 }} className={classes.question_row}>
-        {translations.questions[item.questionType].titleText}
-      </div>
-    );
-  };
 
   const addQuestion = (questionType: QuestionType): void => {
     dispatchQuestions({
@@ -112,12 +96,8 @@ const BuildPage = (): JSX.Element => {
   );
 
   return (
-    <DndProvider
-      backend={isMobile ? TouchBackend : HTML5Backend}
-      options={{ enableMouseEvents: true }}
-    >
+    <DndProvider backend={HTML5Backend}>
       <div className={classes.app}>
-        {isMobile && <MyPreview />}
         <aside className={classes.sidebar}>
           <h2 className={classes.sidebar_title}>
             {translations.app.sidebarTitle}
