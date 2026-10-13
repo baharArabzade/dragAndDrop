@@ -7,13 +7,15 @@ import { usePreview } from "react-dnd-preview";
 import { isMobile } from "react-device-detect";
 // constants
 import {
-  RIGHT_NAVBAR_ITEMS,
-  QUESTION_TYPE,
-  APPRECIATION_TYPE,
-  WELCOME_TYPE,
-  GROUP_QUESTION_TYPE,
-  QUESTIONS_TYPES,
-  actions,
+  DRAG_ACTIONS,
+  GROUP_QUESTION,
+  GROUP_QUESTION_DROP_ZONE,
+  NORMAL_QUESTION_TYPES,
+  QUESTION_DROP_ZONE,
+  QUESTION_TYPES,
+  SIDEBAR_BLOCKS,
+  THANK_YOU_PAGE,
+  WELCOME_PAGE,
 } from "components/constants";
 // components
 import RenderQuestion from "components/Question";
@@ -23,33 +25,27 @@ import RightNavbarItem from "components/RightNavbarItem";
 import classes from "styles/index.module.scss";
 // reducers
 import {
+  createQuestionDetails,
   findQuestion as findQuestionInQuestions,
   questionsReducer,
 } from "reducers/questionsReducer";
 // types
 import {
-  AppreciationPageDetailsType,
   DragItemType,
   HandleDraggingQuestionActionInputTypes,
+  NormalQuestionType,
+  PageDetailsType,
   QuestionType,
-  WelcomePageDetailsType,
 } from "types/componentType";
 import { translations as persianTranslations } from "translations/persian";
-
-const createQuestion = (questionType: string): QuestionType => ({
-  id: uuid(),
-  questionType,
-  ...(questionType === "group" && { subQuestions: [] }),
-});
 
 const BuildPage = (): JSX.Element => {
   const [questionsDetails, dispatchQuestions] = useReducer(
     questionsReducer,
-    [],
+    []
   );
-  const [welcomePage, setWelcomePage] = useState<WelcomePageDetailsType>(null);
-  const [appreciationPage, setAppreciationPage] =
-    useState<AppreciationPageDetailsType>(null);
+  const [welcomePage, setWelcomePage] = useState<PageDetailsType>(null);
+  const [thankYouPage, setThankYouPage] = useState<PageDetailsType>(null);
   const translations = persianTranslations;
   const MyPreview = () => {
     const preview = usePreview<DragItemType>();
@@ -64,38 +60,35 @@ const BuildPage = (): JSX.Element => {
     );
   };
 
-  const addQuestion = (questionType: string): void => {
+  const addQuestion = (questionType: QuestionType): void => {
     dispatchQuestions({
       type: "addQuestion",
-      question: createQuestion(questionType),
+      question: createQuestionDetails(questionType, uuid()),
     });
   };
 
   const addSubQuestionToGroupQuestion = (
-    subQuestionType: string,
-    groupQuestionId: string,
+    subQuestionType: NormalQuestionType,
+    groupQuestionId: string
   ): void => {
     dispatchQuestions({
       type: "addSubQuestion",
       groupQuestionId,
-      question: createQuestion(subQuestionType),
+      question: { id: uuid(), questionType: subQuestionType },
     });
   };
 
-  const addWelcomePage = (welcomePageId: string): void => {
-    setWelcomePage({ id: welcomePageId, questionType: WELCOME_TYPE });
+  const addWelcomePage = (): void => {
+    setWelcomePage({ id: uuid(), questionType: WELCOME_PAGE });
   };
 
-  const addAppreciationPage = (appreciationPageId: string): void => {
-    setAppreciationPage({
-      id: appreciationPageId,
-      questionType: APPRECIATION_TYPE,
-    });
+  const addThankYouPage = (): void => {
+    setThankYouPage({ id: uuid(), questionType: THANK_YOU_PAGE });
   };
 
   const findQuestion = useCallback(
     (id: string) => findQuestionInQuestions(questionsDetails, id),
-    [questionsDetails],
+    [questionsDetails]
   );
 
   const handleDraggingQuestionAction = useCallback(
@@ -104,10 +97,12 @@ const BuildPage = (): JSX.Element => {
         type: "handleDraggingQuestion",
         dragAction,
         previewId:
-          dragAction.action === actions.afterPreViewAdd ? uuid() : undefined,
+          dragAction.action === DRAG_ACTIONS.afterPreViewAdd
+            ? uuid()
+            : undefined,
       });
     },
-    [],
+    []
   );
 
   return (
@@ -123,10 +118,10 @@ const BuildPage = (): JSX.Element => {
           </h2>
           <p className={classes.sidebar_hint}>{translations.app.sidebarHint}</p>
           <div className={classes.sidebar_list}>
-            {RIGHT_NAVBAR_ITEMS.map((question) => (
+            {SIDEBAR_BLOCKS.map((blockType) => (
               <RightNavbarItem
-                key={question.questionType}
-                questionType={question.questionType}
+                key={blockType}
+                questionType={blockType}
                 handleDraggingQuestionAction={handleDraggingQuestionAction}
               />
             ))}
@@ -140,54 +135,45 @@ const BuildPage = (): JSX.Element => {
           <div className={classes.canvas}>
             {welcomePage ? (
               <div className={classes.page_block}>
-                {translations.questions[WELCOME_TYPE].titleText}
+                {translations.questions[WELCOME_PAGE].titleText}
               </div>
             ) : (
               <DropZone
-                acceptType={WELCOME_TYPE}
-                dropZoneType={WELCOME_TYPE}
-                addItemFunction={(welcomePageId) =>
-                  addWelcomePage(welcomePageId)
-                }
+                acceptType={WELCOME_PAGE}
+                dropZoneType={WELCOME_PAGE}
+                addItemFunction={addWelcomePage}
               />
             )}
             {questionsDetails.map((question, index) => (
-              <div className={classes.question_block} key={`${question.id}`}>
+              <div className={classes.question_block} key={question.id}>
                 <RenderQuestion
                   question={question}
-                  id={question.id}
                   isSubQuestion={false}
                   handleDraggingQuestionAction={handleDraggingQuestionAction}
                   findQuestion={findQuestion}
                 />
-                {question?.subQuestions && (
+                {question.questionType === GROUP_QUESTION && (
                   <DropZone
                     index={index}
-                    acceptType={QUESTIONS_TYPES.filter(
-                      (questionType) => questionType != "group",
-                    )}
-                    dropZoneType={GROUP_QUESTION_TYPE}
-                    findQuestion={findQuestion}
-                    groupQuestionId={question.id}
+                    acceptType={NORMAL_QUESTION_TYPES}
+                    dropZoneType={GROUP_QUESTION_DROP_ZONE}
                     handleDraggingQuestionAction={handleDraggingQuestionAction}
-                    addItemFunction={(subQuestion, groupQuestionId) =>
+                    addItemFunction={(subQuestionType) =>
                       addSubQuestionToGroupQuestion(
-                        subQuestion,
-                        groupQuestionId,
+                        subQuestionType,
+                        question.id
                       )
                     }
                   >
-                    {question.subQuestions.map((subQuestion, index) => (
+                    {question.subQuestions.map((subQuestion) => (
                       <RenderQuestion
                         key={subQuestion.id}
                         question={subQuestion}
-                        index={index}
                         isSubQuestion={true}
                         handleDraggingQuestionAction={
                           handleDraggingQuestionAction
                         }
                         findQuestion={findQuestion}
-                        id={subQuestion.id}
                       />
                     ))}
                   </DropZone>
@@ -195,23 +181,20 @@ const BuildPage = (): JSX.Element => {
               </div>
             ))}
             <DropZone
-              addItemFunction={(questionType) => addQuestion(questionType)}
-              acceptType={QUESTIONS_TYPES}
-              dropZoneType={QUESTION_TYPE}
+              addItemFunction={addQuestion}
+              acceptType={QUESTION_TYPES}
+              dropZoneType={QUESTION_DROP_ZONE}
               handleDraggingQuestionAction={handleDraggingQuestionAction}
-              findQuestion={findQuestion}
             />
-            {appreciationPage ? (
+            {thankYouPage ? (
               <div className={classes.page_block}>
-                {translations.questions[APPRECIATION_TYPE].titleText}
+                {translations.questions[THANK_YOU_PAGE].titleText}
               </div>
             ) : (
               <DropZone
-                acceptType={APPRECIATION_TYPE}
-                dropZoneType={APPRECIATION_TYPE}
-                addItemFunction={(appreciationPageId) =>
-                  addAppreciationPage(appreciationPageId)
-                }
+                acceptType={THANK_YOU_PAGE}
+                dropZoneType={THANK_YOU_PAGE}
+                addItemFunction={addThankYouPage}
               />
             )}
           </div>

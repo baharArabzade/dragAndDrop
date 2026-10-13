@@ -1,5 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDrag } from "react-dnd";
+// constants
+import { DRAG_ACTIONS } from "components/constants";
 // style
 import classes from "styles/components/rightNavbar.module.scss";
 // types
@@ -31,7 +33,9 @@ const RightNavbarItem = ({
     [handleDraggingQuestionAction, questionType]
   );
   useEffect(() => {
-    handleDraggingQuestionAction({ action: "deletePreViewQuestion" });
+    handleDraggingQuestionAction({
+      action: DRAG_ACTIONS.deletePreViewQuestion,
+    });
     setInValidDrop(false);
   }, [inValidDrop]);
   return (

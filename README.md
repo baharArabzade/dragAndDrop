@@ -4,7 +4,7 @@ A small form-builder prototype built with Next.js, React, TypeScript, and React 
 
 ## Features
 
-- Welcome and appreciation sections
+- Welcome and thank you pages
 - Number, short-answer, long-answer, and grouped questions
 - Drag-and-drop question ordering
 - Nested questions inside a group

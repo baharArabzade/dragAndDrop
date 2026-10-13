@@ -1,85 +1,85 @@
 import { useDrop } from "react-dnd";
-import { v4 as uuid } from "uuid";
+// constants
+import {
+  DRAG_ACTIONS,
+  GROUP_QUESTION_DROP_ZONE,
+  QUESTION_DROP_ZONE,
+} from "components/constants";
 // style
 import classes from "styles/index.module.scss";
 // types
-import { DragItemType, DropZonePropsTypes } from "types/componentType";
+import {
+  BlockType,
+  DragItemType,
+  DropZonePropsTypes,
+} from "types/componentType";
 // translations
 import { translations as persianTranslations } from "translations/persian";
 
-const DropZone = ({
+const DropZone = <T extends BlockType>({
   addItemFunction,
   children,
   acceptType,
   dropZoneType,
-  findQuestion,
   handleDraggingQuestionAction,
   index,
-  groupQuestionId,
-}: DropZonePropsTypes): JSX.Element => {
+}: DropZonePropsTypes<T>): JSX.Element => {
   const translations = persianTranslations;
   const [{ isOverCurrent }, drop] = useDrop(
     () => ({
       accept: acceptType,
-      drop(item: DragItemType, monitor) {
-        const isNewQuestion = !item.id; // dragged Item from rightNavbar does not have id
-        const dropOnChild = monitor.didDrop();
-        if (dropOnChild) {
+      drop(item: DragItemType<T>, monitor) {
+        if (monitor.didDrop()) {
           return;
         }
-        switch (dropZoneType) {
-          case "welcomePage":
-            addItemFunction(uuid());
-            break;
 
-          case "appreciationPage":
-            addItemFunction(uuid());
-            break;
+        const isNewItem = !item.id; // items dragged from the sidebar do not have an id yet
 
-          case "groupQuestion":
-            if (isNewQuestion) {
-              addItemFunction(item.questionType, groupQuestionId);
-              handleDraggingQuestionAction({
-                action: "deletePreViewQuestion",
-              });
-            } else {
-              handleDraggingQuestionAction({
-                id: item.id,
-                atIndex: index,
-                action: "addToEndOfGroupQuestion",
-              });
-            }
-            break;
+        if (isNewItem) {
+          addItemFunction(item.questionType);
+          handleDraggingQuestionAction?.({
+            action: DRAG_ACTIONS.deletePreViewQuestion,
+          });
+          return;
+        }
 
-          case "questions":
-            if (isNewQuestion) {
-              addItemFunction(item.questionType);
-              handleDraggingQuestionAction({
-                action: "deletePreViewQuestion",
-              });
-            } else {
-              handleDraggingQuestionAction({
-                id: item.id,
-                action: "addToEndOfQuestions",
-              });
-            }
+        if (dropZoneType === GROUP_QUESTION_DROP_ZONE) {
+          handleDraggingQuestionAction?.({
+            id: item.id,
+            atIndex: index,
+            action: DRAG_ACTIONS.addToEndOfGroupQuestion,
+          });
+          return;
+        }
 
-            break;
+        if (dropZoneType === QUESTION_DROP_ZONE) {
+          handleDraggingQuestionAction?.({
+            id: item.id,
+            action: DRAG_ACTIONS.addToEndOfQuestions,
+          });
         }
       },
       collect: (monitor) => ({
         isOverCurrent: monitor.isOver({ shallow: true }),
       }),
     }),
-    [findQuestion, handleDraggingQuestionAction]
+    [
+      acceptType,
+      addItemFunction,
+      dropZoneType,
+      handleDraggingQuestionAction,
+      index,
+    ]
   );
 
   return (
     <div ref={drop}>
       <div
-        className={`${
-          dropZoneType === "groupQuestion" && classes.group_question_drop_zone
-        }`}
+        className={
+          dropZoneType === GROUP_QUESTION_DROP_ZONE
+            ? classes.group_question_drop_zone
+            : undefined
+        }
       >
         {children}
         <div
@@ -93,4 +93,5 @@ const DropZone = ({
     </div>
   );
 };
+
 export default DropZone;

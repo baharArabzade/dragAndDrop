@@ -1,33 +1,41 @@
-export const QUESTION_TYPE = <string>"questions";
-export const APPRECIATION_TYPE = <string>"appreciationPage";
-export const WELCOME_TYPE = <string>"welcomePage";
-export const GROUP_QUESTION_TYPE = <string>"groupQuestion";
-export const QUESTIONS_TYPES = ["number", "group", "longAnswer", "shortAnswer"];
-export const actions = {
+// types
+import {
+  BlockType,
+  NormalQuestionType,
+  QuestionType,
+} from "types/componentType";
+
+export const WELCOME_PAGE = "welcomePage";
+export const THANK_YOU_PAGE = "thankYouPage";
+export const GROUP_QUESTION = "group";
+
+export const QUESTION_DROP_ZONE = "question";
+export const GROUP_QUESTION_DROP_ZONE = "groupQuestion";
+
+export const NORMAL_QUESTION_TYPES: NormalQuestionType[] = [
+  "number",
+  "longAnswer",
+  "shortAnswer",
+];
+
+export const QUESTION_TYPES: QuestionType[] = [
+  "number",
+  GROUP_QUESTION,
+  "longAnswer",
+  "shortAnswer",
+];
+
+export const SIDEBAR_BLOCKS: BlockType[] = [
+  WELCOME_PAGE,
+  ...QUESTION_TYPES,
+  THANK_YOU_PAGE,
+];
+
+export const DRAG_ACTIONS = {
   deletePreViewQuestion: "deletePreViewQuestion",
   afterPreViewAdd: "afterPreViewAdd",
   addNewQuestionPreview: "addNewQuestionPreview",
   addToEndOfGroupQuestion: "addToEndOfGroupQuestion",
   addToEndOfQuestions: "addToEndOfQuestions",
   reOrder: "reOrder",
-};
-export const RIGHT_NAVBAR_ITEMS = [
-  {
-    questionType: "welcomePage",
-  },
-  {
-    questionType: "number",
-  },
-  {
-    questionType: "group",
-  },
-  {
-    questionType: "longAnswer",
-  },
-  {
-    questionType: "shortAnswer",
-  },
-  {
-    questionType: "appreciationPage",
-  },
-];
+} as const;

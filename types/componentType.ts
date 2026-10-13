@@ -1,81 +1,78 @@
-import React from "react";
+import { ReactNode } from "react";
+// constants
+import { DRAG_ACTIONS } from "components/constants";
 
-export type RenderQuestionPropsTypes = {
+export type NormalQuestionType = "number" | "longAnswer" | "shortAnswer";
+export type QuestionType = NormalQuestionType | "group";
+export type PageType = "welcomePage" | "thankYouPage";
+export type BlockType = QuestionType | PageType;
+export type DropZoneType = PageType | "question" | "groupQuestion";
+export type DragActionType = typeof DRAG_ACTIONS[keyof typeof DRAG_ACTIONS];
+
+export type BaseQuestionDetailsType = {
   id?: string;
-  handleDraggingQuestionAction?: ({
-    id,
-    questionType,
-    atIndex,
-    atIndexInGroup,
-    action,
-  }: HandleDraggingQuestionActionInputTypes) => void;
-  findQuestion;
-  isSubQuestion?: boolean;
-  question: {
-    id?: string;
-    questionType?: string;
-    subQuestions?: Array<{
-      id?: string;
-      questionType: string;
-    }>;
-  };
+};
 
-  index?: number;
+export type NormalQuestionDetailsType = BaseQuestionDetailsType & {
+  questionType: NormalQuestionType;
 };
-export type RightNavbarPropsTypes = {
-  handleDraggingQuestionAction?: ({
-    action,
-  }: HandleDraggingQuestionActionInputTypes) => void;
-  questionType: string;
-};
-export type DropZonePropsTypes = {
-  addItemFunction: (p1: string, p2?: string) => void;
-  dropZoneType: string;
-  findQuestion?: (id: string) => {
-    index: number;
-    indexInGroup?: number;
-    question?: QuestionType;
-  };
-  handleDraggingQuestionAction?: ({
-    id,
-    questionType,
-    atIndex,
-    atIndexInGroup,
-    action,
-  }: HandleDraggingQuestionActionInputTypes) => void;
 
-  index?: number;
-  children?: React.ReactNode;
-  acceptType: Array<string> | string;
-  groupQuestionId?: string;
+export type GroupQuestionDetailsType = BaseQuestionDetailsType & {
+  questionType: "group";
+  subQuestions: NormalQuestionDetailsType[];
 };
-export type WelcomePageDetailsType = {
+
+export type QuestionDetailsType =
+  | NormalQuestionDetailsType
+  | GroupQuestionDetailsType;
+
+export type PageDetailsType = {
   id: string;
-  questionType: string;
+  questionType: PageType;
 };
-export type AppreciationPageDetailsType = {
-  id: string;
-  questionType: string;
-};
-export type QuestionType = {
-  id?: string;
-  questionType: string;
-  subQuestions?: Array<{
-    id?: string;
-    questionType: string;
-  }>;
+
+export type QuestionLocationType = {
+  index: number;
+  indexInGroup?: number;
+  question?: QuestionDetailsType;
 };
 
 export type HandleDraggingQuestionActionInputTypes = {
   id?: string;
-  questionType?: string;
+  questionType?: QuestionType;
   atIndex?: number;
   atIndexInGroup?: number;
-  action: string;
+  action: DragActionType;
 };
-export type DragItemType = {
+
+export type HandleDraggingQuestionActionType = (
+  dragAction: HandleDraggingQuestionActionInputTypes
+) => void;
+
+export type DragItemType<T extends BlockType = BlockType> = {
   id?: string;
-  originalIndex: number;
-  originalIndexInGroup: number;
-  questionType: string;
+  originalIndex?: number;
+  originalIndexInGroup?: number;
+  questionType: T;
+};
+
+export type RenderQuestionPropsTypes = {
+  question: QuestionDetailsType;
+  isSubQuestion: boolean;
+  handleDraggingQuestionAction: HandleDraggingQuestionActionType;
+  findQuestion: (id: string) => QuestionLocationType;
+};
+
+export type RightNavbarPropsTypes = {
+  questionType: BlockType;
+  handleDraggingQuestionAction: HandleDraggingQuestionActionType;
+};
+
+export type DropZonePropsTypes<T extends BlockType> = {
+  acceptType: T | T[];
+  dropZoneType: DropZoneType;
+  addItemFunction: (questionType: T) => void;
+  handleDraggingQuestionAction?: HandleDraggingQuestionActionType;
+  index?: number;
+  children?: ReactNode;
 };

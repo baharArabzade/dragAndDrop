@@ -1,27 +1,25 @@
 import update from "immutability-helper";
 // constants
-import { actions } from "components/constants";
+import { DRAG_ACTIONS, GROUP_QUESTION } from "components/constants";
 // types
 import {
+  BaseQuestionDetailsType,
   HandleDraggingQuestionActionInputTypes,
+  NormalQuestionDetailsType,
+  QuestionDetailsType,
+  QuestionLocationType,
   QuestionType,
 } from "types/componentType";
-
-type QuestionLocation = {
-  index: number;
-  indexInGroup?: number;
-  question?: QuestionType;
-};
 
 export type QuestionsReducerAction =
   | {
       type: "addQuestion";
-      question: QuestionType;
+      question: QuestionDetailsType;
     }
   | {
       type: "addSubQuestion";
       groupQuestionId: string;
-      question: QuestionType;
+      question: NormalQuestionDetailsType;
     }
   | {
       type: "handleDraggingQuestion";
@@ -29,11 +27,22 @@ export type QuestionsReducerAction =
       previewId?: string;
     };
 
-export const findQuestion = (
-  questions: Array<QuestionType>,
-  id: string,
-): QuestionLocation => {
-  const questionIndex = questions.findIndex((question) => question.id === id);
+export const createQuestionDetails = (
+  questionType: QuestionType,
+  id?: string
+): QuestionDetailsType => {
+  if (questionType === GROUP_QUESTION) {
+    return { id, questionType, subQuestions: [] };
+  }
+
+  return { id, questionType };
+};
+
+const findQuestionLocation = (
+  questions: QuestionDetailsType[],
+  isMatch: (question: BaseQuestionDetailsType) => boolean
+): QuestionLocationType => {
+  const questionIndex = questions.findIndex(isMatch);
 
   if (questionIndex !== -1) {
     return {
@@ -44,55 +53,40 @@ export const findQuestion = (
   }
 
   for (let index = 0; index < questions.length; index++) {
-    const subQuestionIndex = questions[index].subQuestions?.findIndex(
-      (subQuestion) => subQuestion.id === id,
-    );
+    const question = questions[index];
 
-    if (subQuestionIndex !== undefined && subQuestionIndex !== -1) {
+    if (question.questionType !== GROUP_QUESTION) {
+      continue;
+    }
+
+    const subQuestionIndex = question.subQuestions.findIndex(isMatch);
+
+    if (subQuestionIndex !== -1) {
       return {
         index,
         indexInGroup: subQuestionIndex,
-        question: questions[index].subQuestions[subQuestionIndex],
+        question: question.subQuestions[subQuestionIndex],
       };
     }
   }
 
   return { index: -1 };
 };
+
+export const findQuestion = (
+  questions: QuestionDetailsType[],
+  id: string
+): QuestionLocationType =>
+  findQuestionLocation(questions, (question) => question.id === id);
 
 const findPreviewQuestion = (
-  questions: Array<QuestionType>,
-): QuestionLocation => {
-  const questionIndex = questions.findIndex((question) => !question.id);
-
-  if (questionIndex !== -1) {
-    return {
-      index: questionIndex,
-      indexInGroup: -1,
-      question: questions[questionIndex],
-    };
-  }
-
-  for (let index = 0; index < questions.length; index++) {
-    const subQuestionIndex = questions[index].subQuestions?.findIndex(
-      (subQuestion) => !subQuestion.id,
-    );
-
-    if (subQuestionIndex !== undefined && subQuestionIndex !== -1) {
-      return {
-        index,
-        indexInGroup: subQuestionIndex,
-        question: questions[index].subQuestions[subQuestionIndex],
-      };
-    }
-  }
-
-  return { index: -1 };
-};
+  questions: QuestionDetailsType[]
+): QuestionLocationType =>
+  findQuestionLocation(questions, (question) => !question.id);
 
 const removePreviewQuestion = (
-  questions: Array<QuestionType>,
-): Array<QuestionType> => {
+  questions: QuestionDetailsType[]
+): QuestionDetailsType[] => {
   const previewQuestion = findPreviewQuestion(questions);
 
   if (previewQuestion.index === -1) {
@@ -115,11 +109,11 @@ const removePreviewQuestion = (
 };
 
 const confirmPreviewQuestion = (
-  questions: Array<QuestionType>,
+  questions: QuestionDetailsType[],
   atIndex: number,
   atIndexInGroup: number,
-  previewId: string,
-): Array<QuestionType> => {
+  previewId: string
+): QuestionDetailsType[] => {
   if (atIndexInGroup === -1) {
     return update(questions, {
       [atIndex]: { $merge: { id: previewId } },
@@ -136,21 +130,21 @@ const confirmPreviewQuestion = (
 };
 
 const insertPreviewQuestion = (
-  questions: Array<QuestionType>,
-  questionType: string,
+  questions: QuestionDetailsType[],
+  questionType: QuestionType,
   atIndex: number,
-  atIndexInGroup: number,
-): Array<QuestionType> => {
-  const question: QuestionType = { questionType };
-
-  if (questionType === "group") {
-    question.subQuestions = [];
-  }
+  atIndexInGroup: number
+): QuestionDetailsType[] => {
+  const question = createQuestionDetails(questionType);
 
   if (atIndexInGroup === -1) {
     return update(questions, {
       $splice: [[atIndex, 0, question]],
     });
+  }
+
+  if (question.questionType === GROUP_QUESTION) {
+    return questions;
   }
 
   return update(questions, {
@@ -163,24 +157,39 @@ const insertPreviewQuestion = (
 };
 
 const moveQuestion = (
-  questions: Array<QuestionType>,
-  source: QuestionLocation,
+  questions: QuestionDetailsType[],
+  source: QuestionLocationType,
   atIndex: number,
-  atIndexInGroup: number,
-): Array<QuestionType> => {
+  atIndexInGroup: number
+): QuestionDetailsType[] => {
   const { index, indexInGroup, question } = source;
 
   if (index === -1 || !question) {
     return questions;
   }
 
-  if (indexInGroup === -1 && atIndexInGroup === -1) {
+  if (atIndexInGroup === -1) {
+    if (indexInGroup === -1) {
+      return update(questions, {
+        $splice: [
+          [index, 1],
+          [atIndex, 0, question],
+        ],
+      });
+    }
+
     return update(questions, {
-      $splice: [
-        [index, 1],
-        [atIndex, 0, question],
-      ],
+      [index]: {
+        subQuestions: {
+          $splice: [[indexInGroup, 1]],
+        },
+      },
+      $splice: [[atIndex, 0, question]],
     });
+  }
+
+  if (question.questionType === GROUP_QUESTION) {
+    return questions;
   }
 
   if (indexInGroup === -1) {
@@ -191,17 +200,6 @@ const moveQuestion = (
           $splice: [[atIndexInGroup, 0, question]],
         },
       },
-    });
-  }
-
-  if (atIndexInGroup === -1) {
-    return update(questions, {
-      [index]: {
-        subQuestions: {
-          $splice: [[indexInGroup, 1]],
-        },
-      },
-      $splice: [[atIndex, 0, question]],
     });
   }
 
@@ -233,27 +231,27 @@ const moveQuestion = (
 };
 
 const handleDraggingQuestion = (
-  questions: Array<QuestionType>,
+  questions: QuestionDetailsType[],
   dragAction: HandleDraggingQuestionActionInputTypes,
-  previewId?: string,
-): Array<QuestionType> => {
+  previewId?: string
+): QuestionDetailsType[] => {
   const { id, questionType, action } = dragAction;
   let { atIndex, atIndexInGroup } = dragAction;
 
-  if (action === actions.deletePreViewQuestion) {
+  if (action === DRAG_ACTIONS.deletePreViewQuestion) {
     return removePreviewQuestion(questions);
   }
 
-  if (action === actions.afterPreViewAdd) {
+  if (action === DRAG_ACTIONS.afterPreViewAdd) {
     return confirmPreviewQuestion(
       questions,
       atIndex,
       atIndexInGroup,
-      previewId,
+      previewId
     );
   }
 
-  if (action === actions.addNewQuestionPreview) {
+  if (action === DRAG_ACTIONS.addNewQuestionPreview) {
     const previewQuestion = findPreviewQuestion(questions);
 
     if (previewQuestion.index === -1) {
@@ -261,25 +259,26 @@ const handleDraggingQuestion = (
         questions,
         questionType,
         atIndex,
-        atIndexInGroup,
+        atIndexInGroup
       );
     }
 
-    return moveQuestion(
-      questions,
-      previewQuestion,
-      atIndex,
-      atIndexInGroup,
-    );
+    return moveQuestion(questions, previewQuestion, atIndex, atIndexInGroup);
   }
 
   const question = findQuestion(questions, id);
 
-  if (action === actions.addToEndOfGroupQuestion) {
-    atIndexInGroup = questions[atIndex].subQuestions.length;
+  if (action === DRAG_ACTIONS.addToEndOfGroupQuestion) {
+    const groupQuestion = questions[atIndex];
+
+    if (groupQuestion.questionType !== GROUP_QUESTION) {
+      return questions;
+    }
+
+    atIndexInGroup = groupQuestion.subQuestions.length;
   }
 
-  if (action === actions.addToEndOfQuestions) {
+  if (action === DRAG_ACTIONS.addToEndOfQuestions) {
     atIndex = questions.length;
     atIndexInGroup = -1;
   }
@@ -288,29 +287,28 @@ const handleDraggingQuestion = (
 };
 
 export const questionsReducer = (
-  questions: Array<QuestionType>,
-  action: QuestionsReducerAction,
-): Array<QuestionType> => {
+  questions: QuestionDetailsType[],
+  action: QuestionsReducerAction
+): QuestionDetailsType[] => {
   if (action.type === "addQuestion") {
     return [...questions, action.question];
   }
 
   if (action.type === "addSubQuestion") {
     return questions.map((question) => {
-      if (question.id !== action.groupQuestionId) {
+      if (
+        question.id !== action.groupQuestionId ||
+        question.questionType !== GROUP_QUESTION
+      ) {
         return question;
       }
 
       return {
         ...question,
-        subQuestions: [...(question.subQuestions ?? []), action.question],
+        subQuestions: [...question.subQuestions, action.question],
       };
     });
   }
 
-  return handleDraggingQuestion(
-    questions,
-    action.dragAction,
-    action.previewId,
-  );
+  return handleDraggingQuestion(questions, action.dragAction, action.previewId);
 };

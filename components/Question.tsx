@@ -3,24 +3,30 @@ import { useDrag, useDrop } from "react-dnd";
 // style
 import classes from "styles/components/question.module.scss";
 // types
-import { DragItemType, RenderQuestionPropsTypes } from "types/componentType";
+import {
+  DragItemType,
+  QuestionType,
+  RenderQuestionPropsTypes,
+} from "types/componentType";
 // translations
 import { translations as persianTranslations } from "translations/persian";
 // constants
-import { QUESTIONS_TYPES } from "components/constants";
-import { actions } from "components/constants";
+import {
+  DRAG_ACTIONS,
+  NORMAL_QUESTION_TYPES,
+  QUESTION_TYPES,
+} from "components/constants";
 
 const RenderQuestion = ({
   question,
-  id,
   handleDraggingQuestionAction,
   findQuestion,
   isSubQuestion,
 }: RenderQuestionPropsTypes): JSX.Element => {
   const translations = persianTranslations;
+  const { id, questionType } = question;
   const originalIndex = findQuestion(id).index;
   const originalIndexInGroup = findQuestion(id).indexInGroup;
-  const questionType = question.questionType;
   const [inValidDrop, setInvalidDrop] = useState<boolean>(false);
   const [revertActionData, setRevertActionData] = useState<{
     id: string;
@@ -64,25 +70,23 @@ const RenderQuestion = ({
         id: revertActionData.id,
         atIndex: revertActionData.originalIndex,
         atIndexInGroup: revertActionData.originalIndexInGroup,
-        action: actions.reOrder,
+        action: DRAG_ACTIONS.reOrder,
       });
       setInvalidDrop(false);
     }
   }, [inValidDrop]);
   const [, drop] = useDrop(
     () => ({
-      drop(item: DragItemType) {
+      drop(item: DragItemType<QuestionType>) {
         !item.id &&
           handleDraggingQuestionAction({
             atIndex: originalIndex,
             atIndexInGroup: originalIndexInGroup,
-            action: actions.afterPreViewAdd,
+            action: DRAG_ACTIONS.afterPreViewAdd,
           });
       },
-      accept: isSubQuestion
-        ? QUESTIONS_TYPES.filter((questionType) => questionType != "group")
-        : QUESTIONS_TYPES,
-      hover(item) {
+      accept: isSubQuestion ? NORMAL_QUESTION_TYPES : QUESTION_TYPES,
+      hover(item: DragItemType<QuestionType>) {
         const isNewQuestion = !item.id;
         const overIndex = findQuestion(id).index;
         const overIndexInGroup = findQuestion(id).indexInGroup;
@@ -93,7 +97,7 @@ const RenderQuestion = ({
               questionType: item.questionType,
               atIndex: overIndex,
               atIndexInGroup: overIndexInGroup,
-              action: actions.addNewQuestionPreview,
+              action: DRAG_ACTIONS.addNewQuestionPreview,
             });
           return;
         }
@@ -103,7 +107,7 @@ const RenderQuestion = ({
             id: draggedId,
             atIndex: overIndex,
             atIndexInGroup: overIndexInGroup,
-            action: actions.reOrder,
+            action: DRAG_ACTIONS.reOrder,
           });
         }
       },
@@ -136,7 +140,7 @@ const RenderQuestion = ({
           <span className={classes.drag_handle} />
           <div className={classes.question_content}>
             <span className={classes.question_title}>
-              {translations.questions[question.questionType].titleText}
+              {translations.questions[questionType].titleText}
             </span>
             {isSubQuestion && (
               <span className={classes.question_badge}>
